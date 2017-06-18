@@ -24,6 +24,8 @@
     "react-native": "^0.45.1"
   },
   "dependencies": {
-    "lodash.debounce": "^4.0.8"
+    "@types/prop-types": "^15.5.1",
+    "lodash.debounce": "^4.0.8",
+    "prop-types": "^15.5.10"
   }
 }

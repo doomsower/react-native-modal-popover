@@ -51,7 +51,6 @@ class App extends React.PureComponent {
           isVisible={this.state.showPopover}
           onClose={this.onClosePopover}
           fromRect={this.state.popoverAnchor}
-          displayArea={area}
         >
           <Text>Hello from inside popover!</Text>
         </Popover>

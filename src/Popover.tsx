@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as PropTypes from 'prop-types';
 import {
   StyleSheet, Dimensions, Animated, Easing, TouchableWithoutFeedback, View, Modal,
   ViewStyle
@@ -88,10 +89,36 @@ interface LayoutCallback {
 
 export default class Popover extends React.Component<PopoverProps, PopoverState> {
 
+  static propTypes = {
+    isVisible: PropTypes.bool,
+    onClose: PropTypes.func,
+    arrowSize: PropTypes.shape({
+      x: PropTypes.number,
+      y: PropTypes.number,
+    }),
+    placement: PropTypes.oneOf(['left', 'top', 'right', 'bottom', 'auto']),
+    fromRect: PropTypes.shape({
+      x: PropTypes.number,
+      y: PropTypes.number,
+      width: PropTypes.number,
+      height: PropTypes.number,
+    }).isRequired,
+    displayArea: PropTypes.shape({
+      x: PropTypes.number,
+      y: PropTypes.number,
+      width: PropTypes.number,
+      height: PropTypes.number,
+    }),
+    backgroundStyle: PropTypes.any,
+    arrowStyle: PropTypes.any,
+    popoverStyle: PropTypes.any,
+    contentStyle: PropTypes.any,
+  };
+
   static defaultProps:Partial<PopoverProps> = {
     isVisible: false,
     onClose: () => {},
-    displayArea: {x: 10, y: 10, width: SCREEN_WIDTH - 20, height: SCREEN_HEIGHT - 20 },
+    displayArea: { x: 10, y: 10, width: SCREEN_WIDTH - 20, height: SCREEN_HEIGHT - 20 },
     arrowSize: { width: 16, height: 8 },
     placement: 'auto',
   };
