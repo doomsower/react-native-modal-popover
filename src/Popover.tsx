@@ -101,7 +101,7 @@ export default class Popover extends React.Component<PopoverProps, PopoverState>
       y: PropTypes.number,
       width: PropTypes.number,
       height: PropTypes.number,
-    }).isRequired,
+    }),
     displayArea: PropTypes.shape({
       x: PropTypes.number,
       y: PropTypes.number,
@@ -122,6 +122,8 @@ export default class Popover extends React.Component<PopoverProps, PopoverState>
     arrowSize: { width: 16, height: 8 },
     placement: 'auto',
   };
+
+  static displayName = 'Popover';
 
   constructor(props: PopoverProps) {
     super(props);
