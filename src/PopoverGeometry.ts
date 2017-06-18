@@ -1,21 +1,18 @@
-export class Point {
-  constructor(public x: number, public y: number) {}
+export interface Point {
+  x: number;
+  y: number;
 }
 
-export class Rect {
-  constructor(public x: number, public y: number, public width: number, public height: number) {}
-
-  get right() {
-    return this.x + this.width;
-  }
-
-  get bottom() {
-    return this.y + this.height;
-  }
+export interface Rect {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
 }
 
-export class Size {
-  constructor(public width: number, public height: number) {}
+export interface Size {
+  width: number;
+  height: number;
 }
 
 export type Placement = 'top' | 'right' | 'bottom' | 'left' | 'auto';
@@ -49,70 +46,70 @@ export const computeGeometry = (contentSize: Size, placement: Placement, fromRec
 
 const getArrowSize = (size: Size, placement: Placement): Size => {
   if (placement === 'left' || placement === 'right') {
-    return new Size(size.height, size.width );
+    return { width: size.height, height: size.width };
   }
   return size;
 };
 
 const computeTopGeometry:ComputeGeometry = (displayArea, fromRect, contentSize, arrowSize) => {
-  const origin = new Point(
-    Math.min(
-      displayArea.right - contentSize.width,
+  const origin = {
+    x: Math.min(
+      displayArea.x + displayArea.width - contentSize.width,
       Math.max(displayArea.x, fromRect.x + (fromRect.width - contentSize.width) / 2),
     ),
-    fromRect.y - contentSize.height - arrowSize.height,
-  );
+    y: fromRect.y - contentSize.height - arrowSize.height,
+  };
 
-  const anchor = new Point(fromRect.x + fromRect.width / 2, fromRect.y);
+  const anchor = { x: fromRect.x + fromRect.width / 2, y: fromRect.y };
 
   return { origin, anchor, placement: 'top' };
 };
 
 const computeBottomGeometry:ComputeGeometry = (displayArea, fromRect, contentSize, arrowSize) => {
-  const origin = new Point(
-    Math.min(
-      displayArea.right - contentSize.width,
+  const origin = {
+    x: Math.min(
+      displayArea.x + displayArea.width - contentSize.width,
       Math.max(displayArea.x, fromRect.x + (fromRect.width - contentSize.width) / 2),
     ),
-    fromRect.y + fromRect.height + arrowSize.height,
-  );
+    y: fromRect.y + fromRect.height + arrowSize.height,
+  };
 
-  const anchor = new Point(fromRect.x + fromRect.width / 2, fromRect.y + fromRect.height);
+  const anchor = { x: fromRect.x + fromRect.width / 2, y: fromRect.y + fromRect.height };
 
   return { origin, anchor, placement: 'bottom' };
 };
 
 const computeLeftGeometry:ComputeGeometry = (displayArea, fromRect, contentSize, arrowSize) => {
-  const origin = new Point(
-    fromRect.x - contentSize.width - arrowSize.width,
-    Math.min(
-      displayArea.bottom - contentSize.height,
+  const origin = {
+    x: fromRect.x - contentSize.width - arrowSize.width,
+    y: Math.min(
+      displayArea.y + displayArea.height - contentSize.height,
       Math.max(displayArea.y, fromRect.y + (fromRect.height - contentSize.height) / 2),
     ),
-  );
+  };
 
-  const anchor = new Point(fromRect.x, fromRect.y + fromRect.height / 2);
+  const anchor = { x: fromRect.x, y: fromRect.y + fromRect.height / 2 };
 
   return { origin, anchor, placement: 'left' };
 };
 
 const computeRightGeometry: ComputeGeometry = (displayArea, fromRect, contentSize, arrowSize) => {
-  const origin = new Point(
-    fromRect.right + arrowSize.width,
-    Math.min(
-      displayArea.bottom - contentSize.height,
+  const origin = {
+    x: fromRect.x + fromRect.width + arrowSize.width,
+    y: Math.min(
+      displayArea.y + displayArea.height - contentSize.height,
       Math.max(displayArea.y, fromRect.y + (fromRect.height - contentSize.height) / 2),
     ),
-  );
+  };
 
-  const anchor = new Point(fromRect.x + fromRect.width, fromRect.y + fromRect.height / 2);
+  const anchor = { x: fromRect.x + fromRect.width, y: fromRect.y + fromRect.height / 2 };
 
   return { origin, anchor, placement: 'right' };
 };
 
 const computeAutoGeometry = (displayArea: Rect, fromRect: Rect, contentSize: Size, arrowSize: Size): Geometry => {
   let geom: Geometry | null = null;
-  const placements: Placement[] = ['left', 'right', 'bottom', 'top'];
+  const placements: Placement[] = ['left', 'top', 'right', 'bottom'];
   for (let i = 0; i < 4; i += 1) {
     const placement = placements[i];
     geom = computeGeometry(contentSize, placement, fromRect, displayArea, arrowSize);
@@ -120,9 +117,9 @@ const computeAutoGeometry = (displayArea: Rect, fromRect: Rect, contentSize: Siz
 
     if (
       origin.x >= displayArea.x &&
-      origin.x <= displayArea.right - contentSize.width &&
+      origin.x <= displayArea.x + displayArea.width - contentSize.width &&
       origin.y >= displayArea.y &&
-      origin.y <= displayArea.bottom - contentSize.height
+      origin.y <= displayArea.y + displayArea.height - contentSize.height
     )
     {
       break;

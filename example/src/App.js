@@ -1,6 +1,9 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Popover from './popover/Popover';
+
+const { width, height } = Dimensions.get('window');
+const  area = {x: 0, y: height/2, width, height: height/2};
 
 const styles = StyleSheet.create({
   app: {
@@ -48,6 +51,7 @@ class App extends React.PureComponent {
           isVisible={this.state.showPopover}
           onClose={this.onClosePopover}
           fromRect={this.state.popoverAnchor}
+          displayArea={area}
         >
           <Text>Hello from inside popover!</Text>
         </Popover>

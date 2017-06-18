@@ -3,7 +3,7 @@ import {
   StyleSheet, Dimensions, Animated, Easing, TouchableWithoutFeedback, View, Modal,
   ViewStyle
 } from 'react-native';
-import { Geometry, Placement, Point, Rect, Size, computeGeometry } from './PopoverGeometry';
+import { Geometry, Placement, Rect, Size, computeGeometry } from './PopoverGeometry';
 const debounce = require('lodash.debounce');
 
 const styles = StyleSheet.create({
@@ -91,17 +91,17 @@ export default class Popover extends React.Component<PopoverProps, PopoverState>
   static defaultProps:Partial<PopoverProps> = {
     isVisible: false,
     onClose: () => {},
-    displayArea: new Rect(10, 10, SCREEN_WIDTH - 20, SCREEN_HEIGHT - 20),
-    arrowSize: new Size(16, 8),
+    displayArea: {x: 10, y: 10, width: SCREEN_WIDTH - 20, height: SCREEN_HEIGHT - 20 },
+    arrowSize: { width: 16, height: 8 },
     placement: 'auto',
   };
 
   constructor(props: PopoverProps) {
     super(props);
     this.state = {
-      contentSize: new Size(0,0),
-      anchor: new Point(0,0),
-      origin: new Point(0,0),
+      contentSize: { width: 0, height: 0},
+      anchor: { x: 0, y: 0},
+      origin: { x: 0, y: 0},
       placement: props.placement || 'auto',
       visible: false,
       isAwaitingShow: false,
@@ -137,8 +137,8 @@ export default class Popover extends React.Component<PopoverProps, PopoverState>
 
   private getTranslateOrigin = () => {
     const { contentSize, origin, anchor } = this.state;
-    const popoverCenter = new Point(origin.x + contentSize.width / 2, origin.y + contentSize.height / 2);
-    return new Point(anchor.x - popoverCenter.x, anchor.y - popoverCenter.y);
+    const popoverCenter = { x: origin.x + contentSize.width / 2, y: origin.y + contentSize.height / 2 };
+    return { x: anchor.x - popoverCenter.x, y: anchor.y - popoverCenter.y };
   };
 
   componentWillReceiveProps(nextProps: PopoverProps) {
@@ -149,7 +149,7 @@ export default class Popover extends React.Component<PopoverProps, PopoverState>
       if (willBeVisible) {
         // We want to start the show animation only when contentSize is known
         // so that we can have some logic depending on the geometry
-        this.setState({ contentSize: new Size(0,0), isAwaitingShow: true, visible: true });
+        this.setState({ contentSize: { width: 0, height: 0 }, isAwaitingShow: true, visible: true });
       } else {
         this.startAnimation(false);
       }
@@ -198,7 +198,7 @@ export default class Popover extends React.Component<PopoverProps, PopoverState>
         ...commonConfig,
       }),
       Animated.timing(values.translate, {
-        toValue: show ? new Point(0, 0) : translateOrigin,
+        toValue: show ? { x: 0, y: 0 } : translateOrigin,
         ...commonConfig,
       }),
       Animated.timing(values.scale, {
