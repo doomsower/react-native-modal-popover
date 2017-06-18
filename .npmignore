@@ -2,3 +2,7 @@
 /src
 /.idea
 /node_modules
+.watchmanconfig
+tsconfig.json
+tslint.json
+yarn.lock
