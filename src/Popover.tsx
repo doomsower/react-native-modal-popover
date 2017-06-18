@@ -1,10 +1,10 @@
-import React from 'react';
-import debounce from 'lodash.debounce';
+import * as React from 'react';
 import {
   StyleSheet, Dimensions, Animated, Easing, TouchableWithoutFeedback, View, Modal,
   ViewStyle
 } from 'react-native';
 import { Geometry, Placement, Point, Rect, Size, computeGeometry } from './PopoverGeometry';
+const debounce = require('lodash.debounce');
 
 const styles = StyleSheet.create({
   container: {
@@ -49,12 +49,12 @@ const styles = StyleSheet.create({
 
 const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get('window');
 
-const ArrowRotation: { [index: string]: string} = {
-  bottom: '180deg',
-  left: '-90deg',
-  right: '90deg',
-  top: '0deg',
-  auto: '0deg',
+const ArrowRotation: { [index: string]: number} = {
+  bottom: 2,
+  left: -1,
+  right: 1,
+  top: 0.0,
+  auto: 0.0,
 };
 
 export interface PopoverProps {
@@ -78,6 +78,7 @@ export interface PopoverState extends Geometry {
     scale: Animated.Value;
     translate: Animated.ValueXY;
     fade: Animated.Value;
+    rotate: Animated.Value;
   };
 }
 
@@ -108,6 +109,7 @@ export default class Popover extends React.Component<PopoverProps, PopoverState>
         scale: new Animated.Value(0),
         translate: new Animated.ValueXY({ x: 0, y: 0 }),
         fade: new Animated.Value(0),
+        rotate: new Animated.Value(0),
       },
     };
   }
@@ -173,6 +175,7 @@ export default class Popover extends React.Component<PopoverProps, PopoverState>
 
     if (show) {
       values.translate.setValue(translateOrigin);
+      values.rotate.setValue(ArrowRotation[this.state.placement]);
     }
 
     const commonConfig = {
@@ -184,6 +187,12 @@ export default class Popover extends React.Component<PopoverProps, PopoverState>
     const doneCallback = show ? undefined : () => this.setState({ visible: false });
 
     Animated.parallel([
+      // Workaround - fake animated value
+      Animated.timing(values.rotate, {
+        toValue: ArrowRotation[this.state.placement],
+        duration: 0,
+        useNativeDriver: true,
+      }),
       Animated.timing(values.fade, {
         toValue: show ? 1 : 0,
         ...commonConfig,
@@ -233,7 +242,14 @@ export default class Popover extends React.Component<PopoverProps, PopoverState>
           borderBottomWidth: height / 2,
           borderLeftWidth: width / 2,
           transform: [
-            { rotate: ArrowRotation[placement] },
+            // This is workaround for https://github.com/facebook/react-native/issues/14161
+            // Instead of setting rotate to fixed value, I have to keep it as animated
+            { rotate: animations.rotate.interpolate({
+                inputRange: [-2, 2],
+                outputRange: ['-180deg', '180deg'],
+                extrapolate: 'clamp',
+              }),
+            },
             {
               scale: animations.scale.interpolate({
                 inputRange: [0, 1],
