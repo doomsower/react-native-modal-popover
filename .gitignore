@@ -1,0 +1,5 @@
+/src/.watchmanconfig
+/build/
+/node_modules/
+/.idea
+*.iml

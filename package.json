@@ -1,0 +1,29 @@
+{
+  "name": "react-native-modal-popover",
+  "version": "0.0.1",
+  "description": "Pure JS popover that uses Modal",
+  "main": "build/Popover.js",
+  "repository": "https://github.com/doomsower/react-native-modal-popover",
+  "author": "Konstantin Kuznetsov",
+  "license": "MIT",
+  "scripts": {
+    "compile": "rm -rf ./build/* && tsc"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.66",
+    "@types/lodash.debounce": "^4.0.2",
+    "@types/react": "^15.0.29",
+    "@types/react-native": "^0.44.11",
+    "tslint": "^5.4.3",
+    "tslint-config-airbnb": "^5.1.2",
+    "tslint-react": "^3.0.0",
+    "typescript": "^2.3.4"
+  },
+  "peerDependencies": {
+    "react": "^15.6.1",
+    "react-native": "^0.45.1"
+  },
+  "dependencies": {
+    "lodash.debounce": "^4.0.8"
+  }
+}

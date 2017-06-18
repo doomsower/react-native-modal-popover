@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "outDir": "build/",
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "jsx": "react-native",
+    "lib": ["es6", "dom"],
+    "target": "es5",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noEmitOnError": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    "pretty": true,
+    "removeComments": true,
+    "sourceMap": true
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "compileOnSave": true
+}
