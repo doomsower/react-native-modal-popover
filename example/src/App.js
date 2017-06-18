@@ -48,7 +48,8 @@ class App extends React.PureComponent {
           <Text>Press me!</Text>
         </TouchableOpacity>
         <Popover
-          isVisible={this.state.showPopover}
+          placement="left"
+          visible={this.state.showPopover}
           onClose={this.onClosePopover}
           fromRect={this.state.popoverAnchor}
         >

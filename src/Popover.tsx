@@ -58,7 +58,7 @@ const ArrowRotation: { [index: string]: number } = {
 };
 
 export interface PopoverProps {
-  isVisible?: boolean;
+  visible?: boolean;
   onClose?: () => void;
   arrowSize: Size;
   placement: Placement;
@@ -89,7 +89,7 @@ interface LayoutCallback {
 export default class Popover extends React.Component<PopoverProps, PopoverState> {
 
   static propTypes = {
-    isVisible: PropTypes.bool,
+    visible: PropTypes.bool,
     onClose: PropTypes.func,
     arrowSize: PropTypes.shape({
       x: PropTypes.number,
@@ -115,7 +115,7 @@ export default class Popover extends React.Component<PopoverProps, PopoverState>
   };
 
   static defaultProps: Partial<PopoverProps> = {
-    isVisible: false,
+    visible: false,
     onClose: () => {
     },
     displayArea: { x: 10, y: 10, width: SCREEN_WIDTH - 20, height: SCREEN_HEIGHT - 20 },
@@ -169,10 +169,10 @@ export default class Popover extends React.Component<PopoverProps, PopoverState>
   };
 
   componentWillReceiveProps(nextProps: PopoverProps) {
-    const willBeVisible = nextProps.isVisible;
-    const { isVisible, fromRect, displayArea } = this.props;
+    const willBeVisible = nextProps.visible;
+    const { visible, fromRect, displayArea } = this.props;
 
-    if (willBeVisible !== isVisible) {
+    if (willBeVisible !== visible) {
       if (willBeVisible) {
         // We want to start the show animation only when contentSize is known
         // so that we can have some logic depending on the geometry
@@ -236,7 +236,7 @@ export default class Popover extends React.Component<PopoverProps, PopoverState>
   };
 
   private computeStyles = () => {
-    const { animations, anchor, origin, placement } = this.state;
+    const { animations, anchor, origin } = this.state;
     const arrowSize = this.props.arrowSize;
 
     // Create the arrow from a rectangle with the appropriate borderXWidth set
