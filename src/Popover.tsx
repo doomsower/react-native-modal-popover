@@ -1,39 +1,38 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import {
-  StyleSheet, Dimensions, Animated, Easing, TouchableWithoutFeedback, View, Modal,
-  ViewStyle
+  StyleSheet,
+  Dimensions,
+  Animated,
+  Easing,
+  TouchableWithoutFeedback,
+  View,
+  Modal,
+  ViewStyle,
 } from 'react-native';
 import { Geometry, Placement, Rect, Size, computeGeometry } from './PopoverGeometry';
 const debounce = require('lodash.debounce');
 
 const styles = StyleSheet.create({
   container: {
+    ...StyleSheet.absoluteFillObject as any,
     opacity: 0,
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    position: 'absolute',
     backgroundColor: 'transparent',
   },
   containerVisible: {
     opacity: 1,
   },
   background: {
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    position: 'absolute',
+    ...StyleSheet.absoluteFillObject as any,
     backgroundColor: 'rgba(0,0,0,0.5)',
   },
-  contentContainer: {
+  content: {
     flexDirection: 'column',
     position: 'absolute',
     backgroundColor: '#f2f2f2',
+    padding: 8,
   },
-  dropShadow: {
+  shadow: {
     shadowColor: 'black',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 2,
@@ -50,7 +49,7 @@ const styles = StyleSheet.create({
 
 const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get('window');
 
-const ArrowRotation: { [index: string]: number} = {
+const ArrowRotation: { [index: string]: number } = {
   bottom: 2,
   left: -1,
   right: 1,
@@ -115,9 +114,10 @@ export default class Popover extends React.Component<PopoverProps, PopoverState>
     contentStyle: PropTypes.any,
   };
 
-  static defaultProps:Partial<PopoverProps> = {
+  static defaultProps: Partial<PopoverProps> = {
     isVisible: false,
-    onClose: () => {},
+    onClose: () => {
+    },
     displayArea: { x: 10, y: 10, width: SCREEN_WIDTH - 20, height: SCREEN_HEIGHT - 20 },
     arrowSize: { width: 16, height: 8 },
     placement: 'auto',
@@ -126,9 +126,9 @@ export default class Popover extends React.Component<PopoverProps, PopoverState>
   constructor(props: PopoverProps) {
     super(props);
     this.state = {
-      contentSize: { width: 0, height: 0},
-      anchor: { x: 0, y: 0},
-      origin: { x: 0, y: 0},
+      contentSize: { width: 0, height: 0 },
+      anchor: { x: 0, y: 0 },
+      origin: { x: 0, y: 0 },
       placement: props.placement || 'auto',
       visible: false,
       isAwaitingShow: false,
@@ -143,7 +143,7 @@ export default class Popover extends React.Component<PopoverProps, PopoverState>
 
   private updateState = debounce(this.setState, 100);
 
-  private measureContent:LayoutCallback = ({ nativeEvent: { layout: { width, height } } }) => {
+  private measureContent: LayoutCallback = ({ nativeEvent: { layout: { width, height } } }) => {
     if (width && height) {
       const contentSize = { width, height };
       const geom = computeGeometry(contentSize, this.props.placement, this.props.fromRect, this.props.displayArea, this.props.arrowSize);
@@ -235,7 +235,7 @@ export default class Popover extends React.Component<PopoverProps, PopoverState>
     ]).start(doneCallback);
   };
 
-  private getElementStyles = () => {
+  private computeStyles = () => {
     const { animations, anchor, origin, placement } = this.state;
     const arrowSize = this.props.arrowSize;
 
@@ -248,6 +248,7 @@ export default class Popover extends React.Component<PopoverProps, PopoverState>
 
     return {
       background: [
+        styles.background,
         this.props.backgroundStyle,
         {
           opacity: animations.fade.interpolate({
@@ -258,6 +259,7 @@ export default class Popover extends React.Component<PopoverProps, PopoverState>
         },
       ],
       arrow: [
+        styles.arrow,
         this.props.arrowStyle,
         {
           left: anchor.x - origin.x - width / 2,
@@ -271,7 +273,8 @@ export default class Popover extends React.Component<PopoverProps, PopoverState>
           transform: [
             // This is workaround for https://github.com/facebook/react-native/issues/14161
             // Instead of setting rotate to fixed value, I have to keep it as animated
-            { rotate: animations.rotate.interpolate({
+            {
+              rotate: animations.rotate.interpolate({
                 inputRange: [-2, 2],
                 outputRange: ['-180deg', '180deg'],
                 extrapolate: 'clamp',
@@ -287,8 +290,12 @@ export default class Popover extends React.Component<PopoverProps, PopoverState>
           ],
         },
       ],
-      popover: this.props.popoverStyle,
+      popover: [
+        this.props.popoverStyle,
+      ],
       content: [
+        styles.shadow,
+        styles.content,
         this.props.contentStyle,
         {
           transform: [
@@ -303,24 +310,23 @@ export default class Popover extends React.Component<PopoverProps, PopoverState>
 
   render() {
     const { origin } = this.state;
-    const elementStyles = this.getElementStyles();
-    const contentContainerStyle = [styles.contentContainer, ...elementStyles.content];
-    const arrowStyle = [styles.arrow, ...elementStyles.arrow];
-
+    const computedStyles = this.computeStyles();
     const contentSizeAvailable = this.state.contentSize.width;
-
     return (
       <Modal transparent visible={this.state.visible} onRequestClose={this.props.onClose}>
-        <View style={[styles.container, contentSizeAvailable && styles.containerVisible]} collapsable={false}>
+        <View style={[styles.container, contentSizeAvailable && styles.containerVisible]}>
+
           <TouchableWithoutFeedback onPress={this.props.onClose}>
-            <Animated.View style={[styles.background, ...elementStyles.background]} />
+            <Animated.View style={computedStyles.background} />
           </TouchableWithoutFeedback>
-          <Animated.View style={[{ top: origin.y, left: origin.x }, elementStyles.popover]}>
-            <Animated.View onLayout={this.measureContent} style={contentContainerStyle}>
+
+          <Animated.View style={[{ top: origin.y, left: origin.x }, computedStyles.popover]}>
+            <Animated.View onLayout={this.measureContent} style={computedStyles.content}>
               {this.props.children}
             </Animated.View>
-            <Animated.View style={arrowStyle} />
+            <Animated.View style={computedStyles.arrow} />
           </Animated.View>
+
         </View>
       </Modal>
     );
