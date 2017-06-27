@@ -1,5 +1,7 @@
 # react-native-modal-popover
 Pure JS popover component for react-native
+![Android](https://raw.githubusercontent.com/doomsower/react-native-modal-popover/master/gifs/android.gif)
+![iOS](https://raw.githubusercontent.com/doomsower/react-native-modal-popover/master/gifs/ios.gif)
 
 ## About this module
 The original [react-native-popover](https://github.com/jeanregisser/react-native-popover) is now outdated,
