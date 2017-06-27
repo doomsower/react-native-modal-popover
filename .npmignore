@@ -2,6 +2,7 @@
 /src
 /.idea
 /node_modules
+/gifs
 .watchmanconfig
 tsconfig.json
 tslint.json
