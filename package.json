@@ -1,6 +1,6 @@
 {
   "name": "react-native-modal-popover",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Pure JS popover component for react-native",
   "main": "build/index.js",
   "repository": {
@@ -24,12 +24,12 @@
     "prepublish": "yarn run compile"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.66",
+    "@types/lodash": "^4.14.67",
     "@types/lodash.debounce": "^4.0.2",
-    "@types/react": "^15.0.29",
-    "@types/react-native": "^0.44.11",
+    "@types/react": "^15.0.33",
+    "@types/react-native": "^0.44.13",
     "tslint": "^5.4.3",
-    "tslint-config-airbnb": "^5.1.2",
+    "tslint-eslint-rules": "^4.1.1",
     "tslint-react": "^3.0.0",
     "typescript": "^2.3.4"
   },

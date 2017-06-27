@@ -1,17 +1,18 @@
-import * as React from 'react';
 import * as PropTypes from 'prop-types';
+import * as React from 'react';
 import {
-  StyleSheet,
-  Dimensions,
   Animated,
+  Dimensions,
   Easing,
+  Modal,
+  Platform,
+  StyleSheet,
   TouchableWithoutFeedback,
   View,
-  Modal,
   ViewStyle,
 } from 'react-native';
 import { Geometry, Placement, Rect, Size, computeGeometry } from './PopoverGeometry';
-const debounce = require('lodash.debounce');
+import debounce = require('lodash.debounce');
 
 const styles = StyleSheet.create({
   container: {
@@ -26,17 +27,23 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject as any,
     backgroundColor: 'rgba(0,0,0,0.5)',
   },
+  popover: {
+    ...Platform.select({
+      ios: {
+        shadowColor: 'black',
+        shadowOffset: { width: 0, height: 2 },
+        shadowRadius: 2,
+        shadowOpacity: 0.4,
+        backgroundColor: 'transparent',
+      },
+    }),
+    position: 'absolute',
+  },
   content: {
     flexDirection: 'column',
     position: 'absolute',
     backgroundColor: '#f2f2f2',
     padding: 8,
-  },
-  shadow: {
-    shadowColor: 'black',
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 2,
-    shadowOpacity: 0.8,
   },
   arrow: {
     position: 'absolute',
@@ -49,7 +56,7 @@ const styles = StyleSheet.create({
 
 const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get('window');
 
-const ArrowRotation: { [index: string]: number } = {
+const ARROW_ROTATION: { [index: string]: number } = {
   bottom: 2,
   left: -1,
   right: 1,
@@ -82,13 +89,12 @@ export interface PopoverState extends Geometry {
   };
 }
 
-interface LayoutCallback {
-  (event: { nativeEvent: { layout: { x: number, y: number, width: number, height: number } } }): void;
-}
+type LayoutCallback =
+  (event: { nativeEvent: { layout: { x: number, y: number, width: number, height: number } } }) => void;
 
 export default class Popover extends React.Component<PopoverProps, PopoverState> {
 
-  static propTypes = {
+  static propTypes: any = {
     visible: PropTypes.bool,
     onClose: PropTypes.func,
     arrowSize: PropTypes.shape({
@@ -116,8 +122,7 @@ export default class Popover extends React.Component<PopoverProps, PopoverState>
 
   static defaultProps: Partial<PopoverProps> = {
     visible: false,
-    onClose: () => {
-    },
+    onClose: () => {},
     displayArea: { x: 10, y: 10, width: SCREEN_WIDTH - 20, height: SCREEN_HEIGHT - 20 },
     arrowSize: { width: 16, height: 8 },
     placement: 'auto',
@@ -148,7 +153,9 @@ export default class Popover extends React.Component<PopoverProps, PopoverState>
   private measureContent: LayoutCallback = ({ nativeEvent: { layout: { width, height } } }) => {
     if (width && height) {
       const contentSize = { width, height };
-      const geom = computeGeometry(contentSize, this.props.placement, this.props.fromRect, this.props.displayArea, this.props.arrowSize);
+      const geom = computeGeometry(
+        contentSize, this.props.placement, this.props.fromRect, this.props.displayArea, this.props.arrowSize,
+      );
 
       const isAwaitingShow = this.state.isAwaitingShow;
 
@@ -162,13 +169,13 @@ export default class Popover extends React.Component<PopoverProps, PopoverState>
         }
       });
     }
-  };
+  }
 
   private getTranslateOrigin = () => {
     const { contentSize, origin, anchor } = this.state;
     const popoverCenter = { x: origin.x + contentSize.width / 2, y: origin.y + contentSize.height / 2 };
     return { x: anchor.x - popoverCenter.x, y: anchor.y - popoverCenter.y };
-  };
+  }
 
   componentWillReceiveProps(nextProps: PopoverProps) {
     const willBeVisible = nextProps.visible;
@@ -185,7 +192,9 @@ export default class Popover extends React.Component<PopoverProps, PopoverState>
     } else if (willBeVisible && (fromRect !== nextProps.fromRect || displayArea !== nextProps.displayArea)) {
       const contentSize = this.state.contentSize;
 
-      const geom = computeGeometry(contentSize, nextProps.placement, nextProps.fromRect, nextProps.displayArea, nextProps.arrowSize);
+      const geom = computeGeometry(
+        contentSize, nextProps.placement, nextProps.fromRect, nextProps.displayArea, nextProps.arrowSize,
+      );
 
       const isAwaitingShow = this.state.isAwaitingShow;
       this.setState({ ...geom, contentSize }, () => {
@@ -204,7 +213,7 @@ export default class Popover extends React.Component<PopoverProps, PopoverState>
 
     if (show) {
       values.translate.setValue(translateOrigin);
-      values.rotate.setValue(ArrowRotation[this.state.placement]);
+      values.rotate.setValue(ARROW_ROTATION[this.state.placement]);
     }
 
     const commonConfig = {
@@ -218,7 +227,7 @@ export default class Popover extends React.Component<PopoverProps, PopoverState>
     Animated.parallel([
       // Workaround - fake animated value
       Animated.timing(values.rotate, {
-        toValue: ArrowRotation[this.state.placement],
+        toValue: ARROW_ROTATION[this.state.placement],
         duration: 0,
         useNativeDriver: true,
       }),
@@ -235,7 +244,7 @@ export default class Popover extends React.Component<PopoverProps, PopoverState>
         ...commonConfig,
       }),
     ]).start(doneCallback);
-  };
+  }
 
   private computeStyles = () => {
     const { animations, anchor, origin } = this.state;
@@ -264,11 +273,11 @@ export default class Popover extends React.Component<PopoverProps, PopoverState>
         styles.arrow,
         this.props.arrowStyle,
         {
-          left: anchor.x - origin.x - width / 2,
-          top: anchor.y - origin.y - height / 2,
           width,
           height,
           borderTopWidth: height / 2,
+          left: anchor.x - origin.x - width / 2,
+          top: anchor.y - origin.y - height / 2,
           borderRightWidth: width / 2,
           borderBottomWidth: height / 2,
           borderLeftWidth: width / 2,
@@ -293,10 +302,11 @@ export default class Popover extends React.Component<PopoverProps, PopoverState>
         },
       ],
       popover: [
+        styles.popover,
         this.props.popoverStyle,
+        { top: origin.y, left: origin.x },
       ],
       content: [
-        styles.shadow,
         styles.content,
         this.props.contentStyle,
         {
@@ -308,7 +318,7 @@ export default class Popover extends React.Component<PopoverProps, PopoverState>
         },
       ],
     };
-  };
+  }
 
   render() {
     const { origin } = this.state;
@@ -322,7 +332,7 @@ export default class Popover extends React.Component<PopoverProps, PopoverState>
             <Animated.View style={computedStyles.background} />
           </TouchableWithoutFeedback>
 
-          <Animated.View style={[{ top: origin.y, left: origin.x }, computedStyles.popover]}>
+          <Animated.View style={computedStyles.popover}>
             <Animated.View onLayout={this.measureContent} style={computedStyles.content}>
               {this.props.children}
             </Animated.View>

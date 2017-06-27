@@ -1,3 +1,36 @@
 {
-  "extends": ["tslint-react", "tslint-config-airbnb"]
+  "extends": ["tslint:latest", "tslint-react", "tslint-eslint-rules"],
+  "rules": {
+    "arrow-parens": false,
+    "arrow-return-shorthand": [false],
+    "brace-style": [ true, "1tbs", { "allowSingleLine": true}],
+    "comment-format": [true, "check-space"],
+    "import-blacklist": [true, "rxjs"],
+    "interface-name": false,
+    "jsx-boolean-value": [true, "never"],
+    "jsx-no-multiline-js": false,
+    "member-access": false,
+    "member-ordering": [false],
+    "newline-before-return": false,
+    "no-any": false,
+    "no-inferrable-types": [true],
+    "no-import-side-effect": [true, {"ignore-module": "^rxjs/"}],
+    "no-invalid-this": [true, "check-function-in-method"],
+    "no-null-keyword": false,
+    "no-require-imports": false,
+    "no-switch-case-fall-through": true,
+    "no-trailing-whitespace": true,
+    "no-unused-variable": [true, "react"],
+    "object-curly-spacing": [true, "always"],
+    "object-literal-sort-keys": false,
+    "only-arrow-functions": [true, "allow-declarations"],
+    "ordered-imports": [ true, { "import-sources-order": "lowercase-last", "named-imports-order": "lowercase-last"}],
+    "prefer-method-signature": false,
+    "prefer-template": [true, "allow-single-concat"],
+    "quotemark": [true, "single", "jsx-double"],
+    "semicolon": [true, "always", "ignore-bound-class-methods"],
+    "triple-equals": [true, "allow-null-check"],
+    "typedef": [true,"parameter", "property-declaration", "member-variable-declaration"],
+    "variable-name": [true, "ban-keywords", "check-format", "allow-pascal-case"]
+  }
 }
