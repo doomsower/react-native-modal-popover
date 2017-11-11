@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "build/",
+    "outDir": "lib/",
     "allowSyntheticDefaultImports": true,
     "declaration": true,
     "jsx": "react-native",

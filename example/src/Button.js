@@ -8,17 +8,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#3b5998',
     borderRadius: 4,
   },
-})
+});
 
 class Button extends React.PureComponent {
   render() {
-    const { icon, onPress } = this.props;
+    const { icon, onPress, onLayout } = this.props;
     return (
-      <TouchableOpacity onPress={onPress} style={styles.button}>
+      <TouchableOpacity onPress={onPress} style={styles.button} onLayout={onLayout}>
         <Icon name={icon} color="white" />
       </TouchableOpacity>
     );
   }
-};
+}
 
 export default Button;

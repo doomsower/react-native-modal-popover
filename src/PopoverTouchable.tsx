@@ -1,7 +1,6 @@
-import * as React from 'react';
 import * as PropTypes from 'prop-types';
+import * as React from 'react';
 import { findNodeHandle, MeasureOnSuccessCallback, NativeModules, View } from 'react-native';
-import { ReactElement } from 'react';
 import { Rect } from './PopoverGeometry';
 
 export interface Props {
@@ -9,7 +8,7 @@ export interface Props {
 }
 
 export interface State {
-  showPopover: boolean,
+  showPopover: boolean;
   popoverAnchor: Rect;
 }
 
@@ -19,7 +18,7 @@ class PopoverTouchable extends React.PureComponent<Props, State> {
     onPopoverDisplayed: PropTypes.func,
   };
 
-  constructor(props:Props) {
+  constructor(props: Props) {
     super(props);
     this.state = {
       showPopover: false,
@@ -27,18 +26,20 @@ class PopoverTouchable extends React.PureComponent<Props, State> {
     };
   }
 
-  private _touchable:any = null;
+  private touchable: any = null;
 
-  private setRef = (ref: any) => { this._touchable = ref; };
+  private setRef = (ref: any) => {
+    this.touchable = ref;
+  };
 
   private onPress = () => {
-    const handle = findNodeHandle(this._touchable);
+    const handle = findNodeHandle(this.touchable);
     if (handle) {
       NativeModules.UIManager.measure(handle, this.onTouchableMeasured);
     }
   };
 
-  private onTouchableMeasured:MeasureOnSuccessCallback = (_x, _y, width, height, x, y) => {
+  private onTouchableMeasured: MeasureOnSuccessCallback = (x0, y0, width, height, x, y) => {
     this.setState(
       {
         showPopover: true,
@@ -48,7 +49,7 @@ class PopoverTouchable extends React.PureComponent<Props, State> {
         if (this.props.onPopoverDisplayed) {
           this.props.onPopoverDisplayed();
         }
-      }
+      },
     );
   };
 
@@ -67,13 +68,13 @@ class PopoverTouchable extends React.PureComponent<Props, State> {
     return (
       <View>
         {
-          React.cloneElement(children[0] as ReactElement<any>, {
+          React.cloneElement(children[0] as React.ReactElement<any>, {
             ref: this.setRef,
             onPress: this.onPress,
           })
         }
         {
-          React.cloneElement(children[1] as ReactElement<any>, {
+          React.cloneElement(children[1] as React.ReactElement<any>, {
             visible: this.state.showPopover,
             onClose: this.onClosePopover,
             fromRect: this.state.popoverAnchor,

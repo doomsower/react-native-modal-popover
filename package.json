@@ -2,7 +2,7 @@
   "name": "react-native-modal-popover",
   "version": "0.0.2",
   "description": "Pure JS popover component for react-native",
-  "main": "build/index.js",
+  "main": "lib/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/doomsower/react-native-modal-popover.git"
@@ -24,22 +24,22 @@
     "prepublish": "yarn run compile"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.67",
-    "@types/lodash.debounce": "^4.0.2",
-    "@types/react": "^15.0.33",
-    "@types/react-native": "^0.44.13",
-    "tslint": "^5.4.3",
+    "@types/lodash": "^4.14.85",
+    "@types/lodash.debounce": "^4.0.3",
+    "@types/react": "^16.0.22",
+    "@types/react-native": "^0.50.2",
+    "tslint": "^5.8.0",
     "tslint-eslint-rules": "^4.1.1",
-    "tslint-react": "^3.0.0",
-    "typescript": "^2.3.4"
+    "tslint-react": "^3.2.0",
+    "typescript": "^2.6.1"
   },
   "peerDependencies": {
     "react": "^15.6.1",
     "react-native": "^0.45.1"
   },
   "dependencies": {
-    "@types/prop-types": "^15.5.1",
+    "@types/prop-types": "^15.5.2",
     "lodash.debounce": "^4.0.8",
-    "prop-types": "^15.5.10"
+    "prop-types": "^15.6.0"
   }
 }

@@ -1,3 +1,4 @@
+import debounce = require('lodash.debounce');
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
 import {
@@ -11,12 +12,11 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import { Geometry, Placement, Rect, Size, computeGeometry } from './PopoverGeometry';
-import debounce = require('lodash.debounce');
+import { computeGeometry, Geometry, Placement, Rect, Size } from './PopoverGeometry';
 
-const styles = StyleSheet.create({
+const styles: any = StyleSheet.create({
   container: {
-    ...StyleSheet.absoluteFillObject as any,
+    ...StyleSheet.absoluteFillObject,
     opacity: 0,
     backgroundColor: 'transparent',
   },
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     opacity: 1,
   },
   background: {
-    ...StyleSheet.absoluteFillObject as any,
+    ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(0,0,0,0.5)',
   },
   popover: {
@@ -169,13 +169,13 @@ export default class Popover extends React.Component<PopoverProps, PopoverState>
         }
       });
     }
-  }
+  };
 
   private getTranslateOrigin = () => {
     const { contentSize, origin, anchor } = this.state;
     const popoverCenter = { x: origin.x + contentSize.width / 2, y: origin.y + contentSize.height / 2 };
     return { x: anchor.x - popoverCenter.x, y: anchor.y - popoverCenter.y };
-  }
+  };
 
   componentWillReceiveProps(nextProps: PopoverProps) {
     const willBeVisible = nextProps.visible;
@@ -244,7 +244,7 @@ export default class Popover extends React.Component<PopoverProps, PopoverState>
         ...commonConfig,
       }),
     ]).start(doneCallback);
-  }
+  };
 
   private computeStyles = () => {
     const { animations, anchor, origin } = this.state;
@@ -318,7 +318,7 @@ export default class Popover extends React.Component<PopoverProps, PopoverState>
         },
       ],
     };
-  }
+  };
 
   render() {
     const { origin } = this.state;

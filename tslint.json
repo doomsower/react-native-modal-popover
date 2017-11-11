@@ -24,7 +24,7 @@
     "object-curly-spacing": [true, "always"],
     "object-literal-sort-keys": false,
     "only-arrow-functions": [true, "allow-declarations"],
-    "ordered-imports": [ true, { "import-sources-order": "lowercase-last", "named-imports-order": "lowercase-last"}],
+    "ordered-imports": true,
     "prefer-method-signature": false,
     "prefer-template": [true, "allow-single-concat"],
     "quotemark": [true, "single", "jsx-double"],
