@@ -15,7 +15,7 @@ export interface Size {
   height: number;
 }
 
-export type Placement = 'top' | 'right' | 'bottom' | 'left' | 'auto';
+export type Placement = 'top' | 'right' | 'bottom' | 'left';
 
 export interface Geometry {
   origin: Point;
@@ -26,7 +26,7 @@ export interface Geometry {
 type ComputeGeometry = (displayArea: Rect, fromRect: Rect, contentSize: Size, arrowSize: Size) => Geometry;
 
 export const computeGeometry =
-  (contentSize: Size, placement: Placement, fromRect: Rect, displayArea: Rect, arrowSize: Size): Geometry => {
+  (contentSize: Size, placement: Placement | 'auto', fromRect: Rect, displayArea: Rect, arrowSize: Size): Geometry => {
   const effectiveArrowSize = getArrowSize(arrowSize, placement);
 
   switch (placement) {
@@ -43,7 +43,7 @@ export const computeGeometry =
   }
 };
 
-const getArrowSize = (size: Size, placement: Placement): Size => {
+const getArrowSize = (size: Size, placement: Placement | 'auto'): Size => {
   if (placement === 'left' || placement === 'right') {
     return { width: size.height, height: size.width };
   }
