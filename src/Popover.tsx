@@ -151,7 +151,6 @@ export default class Popover extends React.PureComponent<PopoverProps, PopoverSt
       // Debounce to prevent flickering when displaying a popover with content
       // that doesn't show immediately.
       this.updateState(({ ...geom, contentSize }), () => {
-        console.log('1', geom, this.state.placement);
         // Once state is set, call the showHandler so it can access all the geometry
         // from the state
         if (isAwaitingShow) {
@@ -190,7 +189,6 @@ export default class Popover extends React.PureComponent<PopoverProps, PopoverSt
       this.setState({ ...geom, contentSize }, () => {
         // Once state is set, call the showHandler so it can access all the geometry
         // from the state
-        console.log('2', geom, this.state.placement)
         if (isAwaitingShow) {
           this.startAnimation(true);
         }
