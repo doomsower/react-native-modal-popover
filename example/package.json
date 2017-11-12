@@ -19,6 +19,7 @@
 		"babel-preset-react-native": "4.0.0",
 		"jest": "21.2.1",
 		"react-test-renderer": "16.0.0",
+		"why-did-you-update": "https://github.com/maicki/why-did-you-update",
 		"wml": "^0.0.83"
 	},
 	"jest": {
