@@ -202,7 +202,9 @@ export default class Popover extends React.PureComponent<PopoverProps, PopoverSt
       toValue: show ? 1 : 0,
       duration: 300,
       easing: show ? Easing.out(Easing.back(1.70158)) : Easing.inOut(Easing.quad),
-      useNativeDriver: true,
+      // Only use native driver if on iOS due to an underlying react-native bug
+      // https://github.com/facebook/react-native/issues/14161
+      useNativeDriver: Platform.OS === 'ios',
     }).start(doneCallback);
   };
 
