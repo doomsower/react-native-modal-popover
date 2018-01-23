@@ -66,7 +66,7 @@ class PopoverTouchable extends React.PureComponent<Props, State> {
       throw new Error('Popover touchable must have two children and the second one must be Popover');
     }
     return (
-      <View>
+      <React.Fragment>
         {
           React.cloneElement(children[0] as React.ReactElement<any>, {
             ref: this.setRef,
@@ -80,7 +80,7 @@ class PopoverTouchable extends React.PureComponent<Props, State> {
             fromRect: this.state.popoverAnchor,
           })
         }
-      </View>
+      </React.Fragment>
     );
   }
 }

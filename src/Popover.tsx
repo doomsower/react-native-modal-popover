@@ -246,7 +246,12 @@ export default class Popover extends React.PureComponent<PopoverProps, PopoverSt
           borderLeftWidth: width / 2,
           transform: [
             {
-              rotate: ARROW_DEG[this.state.placement],
+              // Animation is workaround for https://github.com/facebook/react-native/issues/14161
+              rotate: animation.interpolate({
+                inputRange: [0, 1],
+                outputRange: [ARROW_DEG[this.state.placement], ARROW_DEG[this.state.placement]],
+                extrapolate: 'clamp',
+              }),
             },
             {
               scale: animation.interpolate({

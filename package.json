@@ -1,6 +1,6 @@
 {
   "name": "react-native-modal-popover",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Pure JS popover component for react-native",
   "main": "lib/index.js",
   "repository": {
@@ -34,8 +34,8 @@
     "typescript": "^2.6.1"
   },
   "peerDependencies": {
-    "react": "^15.6.1",
-    "react-native": "^0.45.1"
+    "react": ">16.2.0",
+    "react-native": ">0.52.0"
   },
   "dependencies": {
     "@types/prop-types": "^15.5.2",

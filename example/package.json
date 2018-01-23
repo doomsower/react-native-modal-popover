@@ -1,28 +1,27 @@
 {
-	"name": "example",
-	"version": "0.0.1",
-	"private": true,
-	"scripts": {
-		"wml": "wml add ../lib ./src/popover && wml start",
-		"start": "node node_modules/react-native/local-cli/cli.js start",
-		"test": "jest"
-	},
-	"dependencies": {
-		"lodash.debounce": "^4.0.8",
-		"react": "16.0.0",
-		"react-native": "0.50.3",
-		"react-native-vector-icons": "^4.4.2",
-		"rn-snoopy": "^2.0.0"
-	},
-	"devDependencies": {
-		"babel-jest": "21.2.0",
-		"babel-preset-react-native": "4.0.0",
-		"jest": "21.2.1",
-		"react-test-renderer": "16.0.0",
-		"why-did-you-update": "https://github.com/maicki/why-did-you-update",
-		"wml": "^0.0.83"
-	},
-	"jest": {
-		"preset": "react-native"
-	}
+  "name": "example",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "wml": "wml add ../lib ./src/popover && wml start",
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "postinstall": "rm ./node_modules/react-native/local-cli/core/__fixtures__/files/package.json",
+    "test": "jest"
+  },
+  "dependencies": {
+    "lodash.debounce": "^4.0.8",
+    "react": "16.2.0",
+    "react-native": "0.52.1",
+    "react-native-vector-icons": "^4.5.0"
+  },
+  "devDependencies": {
+    "babel-jest": "22.1.0",
+    "babel-preset-react-native": "4.0.0",
+    "jest": "22.1.4",
+    "react-test-renderer": "16.2.0",
+    "wml": "^0.0.83"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
 }
