@@ -78,6 +78,8 @@ onClose           | function  | Yes      |                       | Callback to b
 backgroundStyle   | ViewStyle | Yes      |                       | Custom style to be applied to background overlay 
 contentStyle      | ViewStyle | Yes      |                       | Custom style to be applied to popover reactangle. Use it to set round corners, background color, etc.
 arrowStyle        | ViewStyle | Yes      |                       | Custom style to be applied to popover arrow. Use `borderTopColor` to match content backgroundColor
+duration | number    | Yes      | 300 | Animation duration
+easing | (show: boolean) => (value: number) => number| Yes | show => show ? Easing.out(Easing.back(1.70158)) : Easing.inOut(Easing.quad) | Function that returns easing function for show or hide animation, depending on `show` argument
 
 ### `PopoverTouchable`
 

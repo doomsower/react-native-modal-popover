@@ -74,6 +74,8 @@ export interface PopoverProps {
   arrowStyle: ViewStyle;
   popoverStyle?: ViewStyle;
   contentStyle: ViewStyle;
+  duration?: number;
+  easing?: (show: boolean) => (value: number) => number;
 }
 
 export interface PopoverState extends Geometry {
@@ -112,6 +114,8 @@ export default class Popover extends React.PureComponent<PopoverProps, PopoverSt
     arrowStyle: PropTypes.any,
     popoverStyle: PropTypes.any,
     contentStyle: PropTypes.any,
+    duration: PropTypes.number,
+    easing: PropTypes.func,
   };
 
   static defaultProps: Partial<PopoverProps> = {
@@ -120,6 +124,8 @@ export default class Popover extends React.PureComponent<PopoverProps, PopoverSt
     displayArea: { x: 10, y: 10, width: SCREEN_WIDTH - 20, height: SCREEN_HEIGHT - 20 },
     arrowSize: { width: 16, height: 8 },
     placement: 'auto',
+    duration: 300,
+    easing: (show) => show ? Easing.out(Easing.back(1.70158)) : Easing.inOut(Easing.quad),
   };
 
   static displayName = 'Popover';
@@ -200,8 +206,8 @@ export default class Popover extends React.PureComponent<PopoverProps, PopoverSt
     const doneCallback = show ? undefined : this.onHidden;
     Animated.timing(this.state.animation, {
       toValue: show ? 1 : 0,
-      duration: 300,
-      easing: show ? Easing.out(Easing.back(1.70158)) : Easing.inOut(Easing.quad),
+      duration: this.props.duration,
+      easing: this.props.easing!(show),
       useNativeDriver: true,
     }).start(doneCallback);
   };
