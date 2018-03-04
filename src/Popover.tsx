@@ -76,6 +76,7 @@ export interface PopoverProps {
   contentStyle: ViewStyle;
   duration?: number;
   easing?: (show: boolean) => (value: number) => number;
+  useNativeDriver?: boolean;
 }
 
 export interface PopoverState extends Geometry {
@@ -126,6 +127,7 @@ export default class Popover extends React.PureComponent<PopoverProps, PopoverSt
     placement: 'auto',
     duration: 300,
     easing: (show) => show ? Easing.out(Easing.back(1.70158)) : Easing.inOut(Easing.quad),
+    useNativeDriver: false,
   };
 
   static displayName = 'Popover';
@@ -208,7 +210,7 @@ export default class Popover extends React.PureComponent<PopoverProps, PopoverSt
       toValue: show ? 1 : 0,
       duration: this.props.duration,
       easing: this.props.easing!(show),
-      useNativeDriver: true,
+      useNativeDriver: !!this.props.useNativeDriver,
     }).start(doneCallback);
   };
 
@@ -307,14 +309,14 @@ export default class Popover extends React.PureComponent<PopoverProps, PopoverSt
         <View style={[styles.container, contentSizeAvailable && styles.containerVisible]}>
 
           <TouchableWithoutFeedback onPress={this.props.onClose}>
-            <Animated.View style={computedStyles.background} />
+            <Animated.View style={computedStyles.background} useNativeDriver={!!this.props.useNativeDriver} />
           </TouchableWithoutFeedback>
 
-          <Animated.View style={computedStyles.popover}>
-            <Animated.View onLayout={this.measureContent} style={computedStyles.content}>
+          <Animated.View style={computedStyles.popover} useNativeDriver={!!this.props.useNativeDriver}>
+            <Animated.View onLayout={this.measureContent} style={computedStyles.content} useNativeDriver={!!this.props.useNativeDriver} >
               {this.props.children}
             </Animated.View>
-            <Animated.View style={computedStyles.arrow} />
+            <Animated.View style={computedStyles.arrow} useNativeDriver={!!this.props.useNativeDriver} />
           </Animated.View>
 
         </View>

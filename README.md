@@ -80,6 +80,7 @@ contentStyle      | ViewStyle | Yes      |                       | Custom style 
 arrowStyle        | ViewStyle | Yes      |                       | Custom style to be applied to popover arrow. Use `borderTopColor` to match content backgroundColor
 duration | number    | Yes      | 300 | Animation duration
 easing | (show: boolean) => (value: number) => number| Yes | show => show ? Easing.out(Easing.back(1.70158)) : Easing.inOut(Easing.quad) | Function that returns easing function for show or hide animation, depending on `show` argument
+useNativeDriver | bool | Yes | false | Defines if animations should use native driver
 
 ### `PopoverTouchable`
 
