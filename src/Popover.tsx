@@ -54,8 +54,6 @@ const styles: any = StyleSheet.create({
   },
 });
 
-const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get('window');
-
 const ARROW_DEG: { [index in Placement]: string } = {
   bottom: '-180deg',
   left: '-90deg',
@@ -63,13 +61,15 @@ const ARROW_DEG: { [index in Placement]: string } = {
   top: '0deg',
 };
 
+export type Orientation = 'portrait' | 'portrait-upside-down' | 'landscape' | 'landscape-left' | 'landscape-right';
+
 export interface PopoverProps {
   visible?: boolean;
   onClose?: () => void;
   arrowSize: Size;
   placement: Placement | 'auto';
   fromRect: Rect;
-  displayArea: Rect;
+  displayArea?: Rect;
   backgroundStyle?: ViewStyle;
   arrowStyle: ViewStyle;
   popoverStyle?: ViewStyle;
@@ -77,6 +77,7 @@ export interface PopoverProps {
   duration?: number;
   easing?: (show: boolean) => (value: number) => number;
   useNativeDriver?: boolean;
+  supportedOrientations?: Orientation[];
 }
 
 export interface PopoverState extends Geometry {
@@ -122,7 +123,6 @@ export default class Popover extends React.PureComponent<PopoverProps, PopoverSt
   static defaultProps: Partial<PopoverProps> = {
     visible: false,
     onClose: () => {},
-    displayArea: { x: 10, y: 10, width: SCREEN_WIDTH - 20, height: SCREEN_HEIGHT - 20 },
     arrowSize: { width: 16, height: 8 },
     placement: 'auto',
     duration: 300,
@@ -131,6 +131,8 @@ export default class Popover extends React.PureComponent<PopoverProps, PopoverSt
   };
 
   static displayName = 'Popover';
+
+  private defaultDisplayArea: Rect;
 
   constructor(props: PopoverProps) {
     super(props);
@@ -143,16 +145,37 @@ export default class Popover extends React.PureComponent<PopoverProps, PopoverSt
       isAwaitingShow: false,
       animation: new Animated.Value(0),
     };
+    this.onOrientationChange();
   }
+
+  componentDidMount() {
+    Dimensions.addEventListener('change', this.onOrientationChange);
+  }
+  
+  componentWillUnmount() {
+    Dimensions.removeEventListener('change', this.onOrientationChange);
+  }
+
+  private computeGeometry = (props: PopoverProps, contentSize: Size): Geometry =>
+    computeGeometry(
+      contentSize || this.state.contentSize,
+      props.placement,
+      props.fromRect,
+      props.displayArea || this.defaultDisplayArea,
+      props.arrowSize,
+    );
+
+  private onOrientationChange = (args?: any) => {
+    const dimensions = Dimensions.get('window');
+    this.defaultDisplayArea = { x: 10, y: 10, width: dimensions.width - 20, height: dimensions.height - 20 };
+  };
 
   private updateState = debounce(this.setState, 100);
 
   private measureContent: LayoutCallback = ({ nativeEvent: { layout: { width, height } } }) => {
     if (width && height) {
       const contentSize = { width, height };
-      const geom = computeGeometry(
-        contentSize, this.props.placement, this.props.fromRect, this.props.displayArea, this.props.arrowSize,
-      );
+      const geom = this.computeGeometry(this.props, contentSize);
 
       const isAwaitingShow = this.state.isAwaitingShow;
 
@@ -177,7 +200,7 @@ export default class Popover extends React.PureComponent<PopoverProps, PopoverSt
   componentWillReceiveProps(nextProps: PopoverProps) {
     const willBeVisible = nextProps.visible;
     const { visible, fromRect, displayArea } = this.props;
-
+    
     if (willBeVisible !== visible) {
       if (willBeVisible) {
         // We want to start the show animation only when contentSize is known
@@ -187,14 +210,10 @@ export default class Popover extends React.PureComponent<PopoverProps, PopoverSt
         this.startAnimation(false);
       }
     } else if (willBeVisible && (fromRect !== nextProps.fromRect || displayArea !== nextProps.displayArea)) {
-      const contentSize = this.state.contentSize;
-
-      const geom = computeGeometry(
-        contentSize, nextProps.placement, nextProps.fromRect, nextProps.displayArea, nextProps.arrowSize,
-      );
-
+      const geom = this.computeGeometry(nextProps, this.state.contentSize);
+      
       const isAwaitingShow = this.state.isAwaitingShow;
-      this.setState({ ...geom, contentSize }, () => {
+      this.setState({ ...geom }, () => {
         // Once state is set, call the showHandler so it can access all the geometry
         // from the state
         if (isAwaitingShow) {
@@ -301,22 +320,29 @@ export default class Popover extends React.PureComponent<PopoverProps, PopoverSt
   };
 
   render() {
-    const { origin } = this.state;
+    const { origin, visible } = this.state;
+    const { onClose, supportedOrientations, useNativeDriver } = this.props;
     const computedStyles = this.computeStyles();
     const contentSizeAvailable = this.state.contentSize.width;
     return (
-      <Modal transparent visible={this.state.visible} onRequestClose={this.props.onClose}>
+      <Modal
+        transparent
+        visible={visible}
+        onRequestClose={onClose}
+        supportedOrientations={supportedOrientations}
+        onOrientationChange={this.onOrientationChange}
+      >
         <View style={[styles.container, contentSizeAvailable && styles.containerVisible]}>
 
           <TouchableWithoutFeedback onPress={this.props.onClose}>
-            <Animated.View style={computedStyles.background} useNativeDriver={!!this.props.useNativeDriver} />
+            <Animated.View style={computedStyles.background} useNativeDriver={useNativeDriver} />
           </TouchableWithoutFeedback>
 
-          <Animated.View style={computedStyles.popover} useNativeDriver={!!this.props.useNativeDriver}>
-            <Animated.View onLayout={this.measureContent} style={computedStyles.content} useNativeDriver={!!this.props.useNativeDriver} >
+          <Animated.View style={computedStyles.popover} useNativeDriver={useNativeDriver}>
+            <Animated.View onLayout={this.measureContent} style={computedStyles.content} useNativeDriver={useNativeDriver} >
               {this.props.children}
             </Animated.View>
-            <Animated.View style={computedStyles.arrow} useNativeDriver={!!this.props.useNativeDriver} />
+            <Animated.View style={computedStyles.arrow} useNativeDriver={useNativeDriver} />
           </Animated.View>
 
         </View>

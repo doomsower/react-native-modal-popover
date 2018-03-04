@@ -71,8 +71,8 @@ export default App;
 Prop              | Type      | Optional | Default               | Description
 ----------------- | --------- | -------- | --------------------- | -----------
 visible           | bool      | Yes      | false                 | Show/Hide the popover
-fromRect          | Rect      | No*      |                       | Rectangle at which to anchor the popover. **Optional** when used inside `PopoverTouchable`, **required** when used standalone
-displayArea       | Rect      | Yes      | Screen - 10px padding | Area where the popover is allowed to be displayed
+fromRect          | Rect      | No*      |                       | Rectangle at which to anchor the popover. **Optional** when used inside `PopoverTouchable`, **required** when used standalone. If you set this property, you should also change it when screen orientation changes.
+displayArea       | Rect      | Yes      | Screen - 10px padding | Area where the popover is allowed to be displayed. **Important note:** if you use non-default value here and you want to handle screen orientation changes, it is your responsibility to change this value when screen orientation changes.
 placement         | string    | Yes      | 'auto'                | How to position the popover - top &#124; bottom &#124; left &#124; right &#124; auto. When 'auto' is specified, it will determine the ideal placement so that the popover is fully visible within `displayArea`.
 onClose           | function  | Yes      |                       | Callback to be fired when the user closes the popover
 backgroundStyle   | ViewStyle | Yes      |                       | Custom style to be applied to background overlay 
@@ -81,6 +81,7 @@ arrowStyle        | ViewStyle | Yes      |                       | Custom style 
 duration | number    | Yes      | 300 | Animation duration
 easing | (show: boolean) => (value: number) => number| Yes | show => show ? Easing.out(Easing.back(1.70158)) : Easing.inOut(Easing.quad) | Function that returns easing function for show or hide animation, depending on `show` argument
 useNativeDriver | bool | Yes | false | Defines if animations should use native driver
+supportedOrientations | array of enum('portrait', 'portrait-upside-down', 'landscape', 'landscape-left', 'landscape-right') | Yes | | This prop is passed to react-native `Modal`, see [react-native docs](https://facebook.github.io/react-native/docs/modal.html#supportedorientations). Set this to `['portrait', 'landscape']` if you want your popover to resprect screen orientation.
 
 ### `PopoverTouchable`
 

@@ -1,6 +1,6 @@
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
-import { findNodeHandle, MeasureOnSuccessCallback, NativeModules, View } from 'react-native';
+import { Dimensions, findNodeHandle, MeasureOnSuccessCallback, NativeModules, View } from 'react-native';
 import { Rect } from './PopoverGeometry';
 
 export interface Props {
@@ -25,6 +25,21 @@ class PopoverTouchable extends React.PureComponent<Props, State> {
       popoverAnchor: { x: 0, y: 0, width: 0, height: 0 },
     };
   }
+
+  componentDidMount() {
+    Dimensions.addEventListener('change', this.onOrientationChange);
+  }
+
+  componentWillUnmount() {
+    Dimensions.removeEventListener('change', this.onOrientationChange);
+  }
+
+  private onOrientationChange = () => {
+    if (this.state.showPopover) {
+      // Need to measure touchable and setFrom rect on popover again
+      requestAnimationFrame(this.onPress);
+    }
+  };
 
   private touchable: any = null;
 
