@@ -12,7 +12,7 @@ export interface State {
   popoverAnchor: Rect;
 }
 
-class PopoverTouchable extends React.PureComponent<Props, State> {
+export class PopoverTouchable extends React.PureComponent<Props, State> {
 
   static propTypes = {
     onPopoverDisplayed: PropTypes.func,
@@ -24,6 +24,8 @@ class PopoverTouchable extends React.PureComponent<Props, State> {
       showPopover: false,
       popoverAnchor: { x: 0, y: 0, width: 0, height: 0 },
     };
+    // Not yet
+    // console.warn('PopoverTouchable is deprecated, please use PopoverController instead');
   }
 
   componentDidMount() {
@@ -99,5 +101,3 @@ class PopoverTouchable extends React.PureComponent<Props, State> {
     );
   }
 }
-
-export default PopoverTouchable;

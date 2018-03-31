@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dimensions, Platform, StyleSheet, StatusBar, Text, View } from 'react-native';
-import Popover, { PopoverTouchable } from './popover';
+import { Popover, PopoverController } from './popover';
 import Button from './Button';
 
 class PopoverExample extends React.PureComponent {
@@ -34,12 +34,22 @@ class PopoverExample extends React.PureComponent {
     const { icon, text, alignItems, justifyContent, popoverStyles } = this.props;
     return (
       <View style={{ width, height, alignItems, justifyContent }}>
-        <PopoverTouchable onPopoverDisplayed={() => console.log(text)}>
-          <Button icon={icon} onPress={() => console.log('I don\'t work')}/>
-          <Popover {...popoverStyles} supportedOrientations={['portrait', 'landscape']}>
-            <Text>{text}</Text>
-          </Popover>
-        </PopoverTouchable>
+        <PopoverController>
+          {({ openPopover, closePopover, popoverVisible, setPopoverAnchor, popoverAnchorRect }) => (
+            <React.Fragment>
+              <Button icon={icon} ref={setPopoverAnchor} onPress={openPopover} />
+              <Popover 
+                {...popoverStyles}
+                visible={popoverVisible}
+                onClose={closePopover}
+                fromRect={popoverAnchorRect}
+                supportedOrientations={['portrait', 'landscape']}
+              >
+                <Text>{text}</Text>
+              </Popover>
+            </React.Fragment>
+          )}
+        </PopoverController>
       </View>
     );
   }

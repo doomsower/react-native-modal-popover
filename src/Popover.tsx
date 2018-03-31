@@ -90,7 +90,7 @@ export interface PopoverState extends Geometry {
 type LayoutCallback =
   (event: { nativeEvent: { layout: { x: number, y: number, width: number, height: number } } }) => void;
 
-export default class Popover extends React.PureComponent<PopoverProps, PopoverState> {
+export class Popover extends React.PureComponent<PopoverProps, PopoverState> {
 
   static propTypes: any = {
     visible: PropTypes.bool,

@@ -1,5 +1,7 @@
-import Popover from './Popover';
+import { Popover } from './Popover';
 
 export default Popover;
 
-export { default as  PopoverTouchable } from './PopoverTouchable';
+export { Popover, PopoverProps } from './Popover';
+export { PopoverController, PopoverControllerRenderProps } from './PopoverController';
+export { PopoverTouchable } from './PopoverTouchable';
