@@ -151,7 +151,7 @@ export class Popover extends React.PureComponent<PopoverProps, PopoverState> {
   componentDidMount() {
     Dimensions.addEventListener('change', this.onOrientationChange);
   }
-  
+
   componentWillUnmount() {
     Dimensions.removeEventListener('change', this.onOrientationChange);
   }
@@ -181,7 +181,7 @@ export class Popover extends React.PureComponent<PopoverProps, PopoverState> {
 
       // Debounce to prevent flickering when displaying a popover with content
       // that doesn't show immediately.
-      this.updateState(({ ...geom, contentSize }), () => {
+      this.updateState(({ ...geom, contentSize } as any), () => {
         // Once state is set, call the showHandler so it can access all the geometry
         // from the state
         if (isAwaitingShow) {
@@ -200,7 +200,7 @@ export class Popover extends React.PureComponent<PopoverProps, PopoverState> {
   componentWillReceiveProps(nextProps: PopoverProps) {
     const willBeVisible = nextProps.visible;
     const { visible, fromRect, displayArea } = this.props;
-    
+
     if (willBeVisible !== visible) {
       if (willBeVisible) {
         // We want to start the show animation only when contentSize is known
@@ -211,7 +211,7 @@ export class Popover extends React.PureComponent<PopoverProps, PopoverState> {
       }
     } else if (willBeVisible && (fromRect !== nextProps.fromRect || displayArea !== nextProps.displayArea)) {
       const geom = this.computeGeometry(nextProps, this.state.contentSize);
-      
+
       const isAwaitingShow = this.state.isAwaitingShow;
       this.setState({ ...geom }, () => {
         // Once state is set, call the showHandler so it can access all the geometry
