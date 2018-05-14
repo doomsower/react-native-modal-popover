@@ -66,8 +66,8 @@ export type Orientation = 'portrait' | 'portrait-upside-down' | 'landscape' | 'l
 export interface PopoverProps {
   visible?: boolean;
   onClose?: () => void;
-  arrowSize: Size;
-  placement: Placement | 'auto';
+  arrowSize?: Size;
+  placement?: Placement | 'auto';
   fromRect: Rect;
   displayArea?: Rect;
   backgroundStyle?: ViewStyle;
@@ -140,7 +140,7 @@ export class Popover extends React.PureComponent<PopoverProps, PopoverState> {
       contentSize: { width: 0, height: 0 },
       anchor: { x: 0, y: 0 },
       origin: { x: 0, y: 0 },
-      placement: props.placement  === 'auto' ? 'top' : props.placement,
+      placement: props.placement  === 'auto' ? 'top' : props.placement!,
       visible: false,
       isAwaitingShow: false,
       animation: new Animated.Value(0),
@@ -159,10 +159,10 @@ export class Popover extends React.PureComponent<PopoverProps, PopoverState> {
   private computeGeometry = (props: PopoverProps, contentSize: Size): Geometry =>
     computeGeometry(
       contentSize || this.state.contentSize,
-      props.placement,
+      props.placement!,
       props.fromRect,
       props.displayArea || this.defaultDisplayArea,
-      props.arrowSize,
+      props.arrowSize!,
     );
 
   private onOrientationChange = (args?: any) => {
@@ -244,8 +244,8 @@ export class Popover extends React.PureComponent<PopoverProps, PopoverState> {
     // A rotation is then applied depending on the placement
     // Also make it slightly bigger
     // to fix a visual artifact when the popover is animated with a scale
-    const width = arrowSize.width + 2;
-    const height = arrowSize.height * 2 + 2;
+    const width = arrowSize!.width + 2;
+    const height = arrowSize!.height * 2 + 2;
 
     return {
       background: [
