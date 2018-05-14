@@ -71,9 +71,9 @@ export interface PopoverProps {
   fromRect: Rect;
   displayArea?: Rect;
   backgroundStyle?: ViewStyle;
-  arrowStyle: ViewStyle;
+  arrowStyle?: ViewStyle;
   popoverStyle?: ViewStyle;
-  contentStyle: ViewStyle;
+  contentStyle?: ViewStyle;
   duration?: number;
   easing?: (show: boolean) => (value: number) => number;
   useNativeDriver?: boolean;
