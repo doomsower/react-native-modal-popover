@@ -4,7 +4,7 @@
     "allowSyntheticDefaultImports": true,
     "declaration": true,
     "jsx": "react-native",
-    "lib": ["es6", "dom"],
+    "lib": ["esnext"],
     "target": "es5",
     "module": "commonjs",
     "moduleResolution": "node",
