@@ -66,6 +66,7 @@ export type Orientation = 'portrait' | 'portrait-upside-down' | 'landscape' | 'l
 export interface PopoverProps {
   visible?: boolean;
   onClose?: () => void;
+  onDismiss?: () => void;
   arrowSize?: Size;
   placement?: Placement | 'auto';
   fromRect: Rect;
@@ -95,6 +96,7 @@ export class Popover extends React.PureComponent<PopoverProps, PopoverState> {
   static propTypes: any = {
     visible: PropTypes.bool,
     onClose: PropTypes.func,
+    onDismiss: PropTypes.func,
     arrowSize: PropTypes.shape({
       x: PropTypes.number,
       y: PropTypes.number,
@@ -123,6 +125,7 @@ export class Popover extends React.PureComponent<PopoverProps, PopoverState> {
   static defaultProps: Partial<PopoverProps> = {
     visible: false,
     onClose: () => {},
+    onDismiss: () => {},
     arrowSize: { width: 16, height: 8 },
     placement: 'auto',
     duration: 300,
@@ -321,7 +324,7 @@ export class Popover extends React.PureComponent<PopoverProps, PopoverState> {
 
   render() {
     const { origin, visible } = this.state;
-    const { onClose, supportedOrientations, useNativeDriver } = this.props;
+    const { onClose, onDismiss, supportedOrientations, useNativeDriver } = this.props;
     const computedStyles = this.computeStyles();
     const contentSizeAvailable = this.state.contentSize.width;
     return (
@@ -329,6 +332,7 @@ export class Popover extends React.PureComponent<PopoverProps, PopoverState> {
         transparent
         visible={visible}
         onRequestClose={onClose}
+        onDismiss={onDismiss}
         supportedOrientations={supportedOrientations}
         onOrientationChange={this.onOrientationChange}
       >
