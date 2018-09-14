@@ -90,6 +90,7 @@ fromRect          | Rect      | No*      |                       | Rectangle at 
 displayArea       | Rect      | Yes      | Screen - 10px padding | Area where the popover is allowed to be displayed. **Important note:** if you use non-default value here and you want to handle screen orientation changes, it is your responsibility to change this value when screen orientation changes.
 placement         | string    | Yes      | 'auto'                | How to position the popover - top &#124; bottom &#124; left &#124; right &#124; auto. When 'auto' is specified, it will determine the ideal placement so that the popover is fully visible within `displayArea`.
 onClose           | function  | Yes      |                       | Callback to be fired when the user closes the popover
+onDismiss         | function  | Yes      |                       | Callback to be fired after the popup closes
 backgroundStyle   | ViewStyle | Yes      |                       | Custom style to be applied to background overlay 
 contentStyle      | ViewStyle | Yes      |                       | Custom style to be applied to popover reactangle. Use it to set round corners, background color, etc.
 arrowStyle        | ViewStyle | Yes      |                       | Custom style to be applied to popover arrow. Use `borderTopColor` to match content backgroundColor
