@@ -11,10 +11,11 @@ import {
   TouchableWithoutFeedback,
   View,
   ViewStyle,
+  StyleProp,
 } from 'react-native';
 import { computeGeometry, Geometry, Placement, Rect, Size } from './PopoverGeometry';
 
-const styles: any = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
     opacity: 0,
@@ -71,10 +72,10 @@ export interface PopoverProps {
   placement?: Placement | 'auto';
   fromRect: Rect;
   displayArea?: Rect;
-  backgroundStyle?: ViewStyle;
-  arrowStyle?: ViewStyle;
-  popoverStyle?: ViewStyle;
-  contentStyle?: ViewStyle;
+  backgroundStyle?: StyleProp<ViewStyle>;
+  arrowStyle?: StyleProp<ViewStyle>;
+  popoverStyle?: StyleProp<ViewStyle>;
+  contentStyle?: StyleProp<ViewStyle>;
   duration?: number;
   easing?: (show: boolean) => (value: number) => number;
   useNativeDriver?: boolean;
@@ -93,7 +94,7 @@ type LayoutCallback =
 
 export class Popover extends React.PureComponent<PopoverProps, PopoverState> {
 
-  static propTypes: any = {
+  static propTypes = {
     visible: PropTypes.bool,
     onClose: PropTypes.func,
     onDismiss: PropTypes.func,
@@ -135,7 +136,7 @@ export class Popover extends React.PureComponent<PopoverProps, PopoverState> {
 
   static displayName = 'Popover';
 
-  private defaultDisplayArea: Rect;
+  private defaultDisplayArea!: Rect;
 
   constructor(props: PopoverProps) {
     super(props);
@@ -168,7 +169,7 @@ export class Popover extends React.PureComponent<PopoverProps, PopoverState> {
       props.arrowSize!,
     );
 
-  private onOrientationChange = (args?: any) => {
+  private onOrientationChange = () => {
     const dimensions = Dimensions.get('window');
     this.defaultDisplayArea = { x: 10, y: 10, width: dimensions.width - 20, height: dimensions.height - 20 };
   };
@@ -336,7 +337,7 @@ export class Popover extends React.PureComponent<PopoverProps, PopoverState> {
         supportedOrientations={supportedOrientations}
         onOrientationChange={this.onOrientationChange}
       >
-        <View style={[styles.container, contentSizeAvailable && styles.containerVisible]}>
+        <View style={[styles.container, !!contentSizeAvailable && styles.containerVisible]}>
 
           <TouchableWithoutFeedback onPress={this.props.onClose}>
             <Animated.View style={computedStyles.background} useNativeDriver={useNativeDriver} />

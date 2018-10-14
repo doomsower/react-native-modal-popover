@@ -9,11 +9,7 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "noEmitOnError": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "strictNullChecks": true,
+    "strict": true,
     "pretty": true,
     "removeComments": true,
     "sourceMap": true
