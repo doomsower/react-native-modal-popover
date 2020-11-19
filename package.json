@@ -1,8 +1,8 @@
 {
   "name": "react-native-modal-popover",
-  "version": "0.0.7",
+  "version": "0.0.12",
   "description": "Pure JS popover component for react-native",
-  "main": "lib/index.js",
+  "main": "src/index.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/doomsower/react-native-modal-popover.git"
@@ -20,27 +20,24 @@
   },
   "homepage": "https://github.com/doomsower/react-native-modal-popover#readme",
   "scripts": {
-    "compile": "rm -rf ./build/* && tsc",
-    "prepublish": "yarn run compile",
-    "tsc:watch": "yarn run tsc --watch"
+    "prepublish": "yarn run lint",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.85",
-    "@types/lodash.debounce": "^4.0.3",
-    "@types/react": "^16.0.22",
-    "@types/react-native": "^0.50.2",
-    "tslint": "^5.8.0",
-    "tslint-eslint-rules": "^4.1.1",
-    "tslint-react": "^3.2.0",
-    "typescript": "^2.6.1"
+    "@react-native-community/eslint-config": "^2.0.0",
+    "@types/lodash.debounce": "^4.0.6",
+    "@types/react": "^16.9.56",
+    "@types/react-native": "^0.63.35",
+    "@typescript-eslint/eslint-plugin": "^4.8.1",
+    "@typescript-eslint/parser": "^4.8.1",
+    "eslint": "^7.13.0",
+    "typescript": "^4.0.5"
   },
   "peerDependencies": {
-    "react": ">16.0.0",
-    "react-native": ">0.50.0"
+    "react": ">17.0.1",
+    "react-native": ">0.63.3"
   },
   "dependencies": {
-    "@types/prop-types": "^15.5.2",
-    "lodash.debounce": "^4.0.8",
-    "prop-types": "^15.6.0"
+    "lodash.debounce": "^4.0.8"
   }
 }

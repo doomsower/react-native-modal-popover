@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import {StyleSheet, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const styles = StyleSheet.create({
@@ -12,9 +12,12 @@ const styles = StyleSheet.create({
 
 class Button extends React.PureComponent {
   render() {
-    const { icon, onPress, onLayout } = this.props;
+    const {icon, onPress, onLayout} = this.props;
     return (
-      <TouchableOpacity onPress={onPress} style={styles.button} onLayout={onLayout}>
+      <TouchableOpacity
+        onPress={onPress}
+        style={styles.button}
+        onLayout={onLayout}>
         <Icon name={icon} color="white" />
       </TouchableOpacity>
     );

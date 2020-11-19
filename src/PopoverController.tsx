@@ -1,7 +1,13 @@
-import * as PropTypes from 'prop-types';
 import * as React from 'react';
-import { Dimensions, findNodeHandle, MeasureOnSuccessCallback, NativeModules, View } from 'react-native';
-import { Rect } from './PopoverGeometry';
+import {
+  Dimensions,
+  findNodeHandle,
+  I18nManager,
+  MeasureOnSuccessCallback,
+  NativeModules,
+  StatusBar,
+} from 'react-native';
+import {Rect} from './PopoverGeometry';
 
 export interface PopoverControllerRenderProps {
   openPopover: () => void;
@@ -12,22 +18,19 @@ export interface PopoverControllerRenderProps {
 }
 
 export interface Props {
-  children: (props: PopoverControllerRenderProps) => React.ReactElement<any>;
+  calculateStatusBar?: boolean;
+  children: (props: PopoverControllerRenderProps) => React.ReactElement;
 }
 
 export interface State {
-  showPopover: boolean;
   popoverAnchor: Rect;
+  showPopover: boolean;
 }
 
 export class PopoverController extends React.PureComponent<Props, State> {
-  static propTypes = {
-    children: PropTypes.func.isRequired,
-  };
-
   state: State = {
     showPopover: false,
-    popoverAnchor: { x: 0, y: 0, width: 0, height: 0 },
+    popoverAnchor: {x: 0, y: 0, width: 0, height: 0},
   };
 
   componentDidMount() {
@@ -58,14 +61,27 @@ export class PopoverController extends React.PureComponent<Props, State> {
     }
   };
 
-  private onTouchableMeasured: MeasureOnSuccessCallback = (x0, y0, width, height, x, y) => {
+  private onTouchableMeasured: MeasureOnSuccessCallback = (
+      x0,
+      y0,
+      width,
+      height,
+      x,
+      y,
+  ) => {
+    const dimensions = Dimensions.get('window');
     this.setState({
-        showPopover: true,
-        popoverAnchor: { x, y, width, height },
+      showPopover: true,
+      popoverAnchor: {
+        x: I18nManager.isRTL ? dimensions.width - x : x,
+        y: y - (this.props.calculateStatusBar ? StatusBar.currentHeight ?? 0 : 0),
+        width,
+        height,
+      },
     });
   };
 
-  private closePopover = () => this.setState({ showPopover: false });
+  private closePopover = () => this.setState({showPopover: false});
 
   render() {
     return this.props.children({

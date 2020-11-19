@@ -3,23 +3,27 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "wml": "wml add ../lib ./src/popover && wml start",
-    "start": "node node_modules/react-native/local-cli/cli.js start",
-    "postinstall": "rm ./node_modules/react-native/local-cli/core/__fixtures__/files/package.json",
-    "test": "jest"
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "start": "react-native start",
+    "test": "jest",
+    "lint": "eslint ."
   },
   "dependencies": {
-    "lodash.debounce": "^4.0.8",
-    "react": "16.2.0",
-    "react-native": "0.52.1",
-    "react-native-vector-icons": "^4.5.0"
+    "react": "16.13.1",
+    "react-native": "0.63.3",
+    "react-native-modal-popover": "../",
+    "react-native-vector-icons": "^7.1.0"
   },
   "devDependencies": {
-    "babel-jest": "22.1.0",
-    "babel-preset-react-native": "4.0.0",
-    "jest": "22.1.4",
-    "react-test-renderer": "16.2.0",
-    "wml": "^0.0.83"
+    "@babel/core": "^7.8.4",
+    "@babel/runtime": "^7.8.4",
+    "@react-native-community/eslint-config": "^1.1.0",
+    "babel-jest": "^25.1.0",
+    "eslint": "^6.5.1",
+    "jest": "^25.1.0",
+    "metro-react-native-babel-preset": "^0.59.0",
+    "react-test-renderer": "16.13.1"
   },
   "jest": {
     "preset": "react-native"
