@@ -23,23 +23,58 @@ export interface Geometry {
   placement: Placement;
 }
 
-type ComputeGeometry = (displayArea: Rect, fromRect: Rect, contentSize: Size, arrowSize: Size) => Geometry;
+type ComputeGeometry = (
+  displayArea: Rect,
+  fromRect: Rect,
+  contentSize: Size,
+  arrowSize: Size,
+) => Geometry;
 
-export const computeGeometry =
-  (contentSize: Size, placement: Placement | 'auto', fromRect: Rect, displayArea: Rect, arrowSize: Size): Geometry => {
+export const computeGeometry = (
+  contentSize: Size,
+  placement: Placement | 'auto',
+  fromRect: Rect,
+  displayArea: Rect,
+  arrowSize: Size,
+): Geometry => {
   const effectiveArrowSize = getArrowSize(arrowSize, placement);
 
   switch (placement) {
     case 'top':
-      return computeTopGeometry(displayArea, fromRect, contentSize, effectiveArrowSize);
+      return computeTopGeometry(
+        displayArea,
+        fromRect,
+        contentSize,
+        effectiveArrowSize,
+      );
     case 'bottom':
-      return computeBottomGeometry(displayArea, fromRect, contentSize, effectiveArrowSize);
+      return computeBottomGeometry(
+        displayArea,
+        fromRect,
+        contentSize,
+        effectiveArrowSize,
+      );
     case 'left':
-      return computeLeftGeometry(displayArea, fromRect, contentSize, effectiveArrowSize);
+      return computeLeftGeometry(
+        displayArea,
+        fromRect,
+        contentSize,
+        effectiveArrowSize,
+      );
     case 'right':
-      return computeRightGeometry(displayArea, fromRect, contentSize, effectiveArrowSize);
+      return computeRightGeometry(
+        displayArea,
+        fromRect,
+        contentSize,
+        effectiveArrowSize,
+      );
     default:
-      return computeAutoGeometry(displayArea, fromRect, contentSize, effectiveArrowSize);
+      return computeAutoGeometry(
+        displayArea,
+        fromRect,
+        contentSize,
+        effectiveArrowSize,
+      );
   }
 };
 
@@ -50,11 +85,19 @@ const getArrowSize = (size: Size, placement: Placement | 'auto'): Size => {
   return size;
 };
 
-const computeTopGeometry: ComputeGeometry = (displayArea, fromRect, contentSize, arrowSize) => {
+const computeTopGeometry: ComputeGeometry = (
+  displayArea,
+  fromRect,
+  contentSize,
+  arrowSize,
+) => {
   const origin = {
     x: Math.min(
       displayArea.x + displayArea.width - contentSize.width,
-      Math.max(displayArea.x, fromRect.x + (fromRect.width - contentSize.width) / 2),
+      Math.max(
+        displayArea.x,
+        fromRect.x + (fromRect.width - contentSize.width) / 2,
+      ),
     ),
     y: fromRect.y - contentSize.height - arrowSize.height,
   };
@@ -64,26 +107,45 @@ const computeTopGeometry: ComputeGeometry = (displayArea, fromRect, contentSize,
   return { origin, anchor, placement: 'top' };
 };
 
-const computeBottomGeometry: ComputeGeometry = (displayArea, fromRect, contentSize, arrowSize) => {
+const computeBottomGeometry: ComputeGeometry = (
+  displayArea,
+  fromRect,
+  contentSize,
+  arrowSize,
+) => {
   const origin = {
     x: Math.min(
       displayArea.x + displayArea.width - contentSize.width,
-      Math.max(displayArea.x, fromRect.x + (fromRect.width - contentSize.width) / 2),
+      Math.max(
+        displayArea.x,
+        fromRect.x + (fromRect.width - contentSize.width) / 2,
+      ),
     ),
     y: fromRect.y + fromRect.height + arrowSize.height,
   };
 
-  const anchor = { x: fromRect.x + fromRect.width / 2, y: fromRect.y + fromRect.height };
+  const anchor = {
+    x: fromRect.x + fromRect.width / 2,
+    y: fromRect.y + fromRect.height,
+  };
 
   return { origin, anchor, placement: 'bottom' };
 };
 
-const computeLeftGeometry: ComputeGeometry = (displayArea, fromRect, contentSize, arrowSize) => {
+const computeLeftGeometry: ComputeGeometry = (
+  displayArea,
+  fromRect,
+  contentSize,
+  arrowSize,
+) => {
   const origin = {
     x: fromRect.x - contentSize.width - arrowSize.width,
     y: Math.min(
       displayArea.y + displayArea.height - contentSize.height,
-      Math.max(displayArea.y, fromRect.y + (fromRect.height - contentSize.height) / 2),
+      Math.max(
+        displayArea.y,
+        fromRect.y + (fromRect.height - contentSize.height) / 2,
+      ),
     ),
   };
 
@@ -92,26 +154,48 @@ const computeLeftGeometry: ComputeGeometry = (displayArea, fromRect, contentSize
   return { origin, anchor, placement: 'left' };
 };
 
-const computeRightGeometry: ComputeGeometry = (displayArea, fromRect, contentSize, arrowSize) => {
+const computeRightGeometry: ComputeGeometry = (
+  displayArea,
+  fromRect,
+  contentSize,
+  arrowSize,
+) => {
   const origin = {
     x: fromRect.x + fromRect.width + arrowSize.width,
     y: Math.min(
       displayArea.y + displayArea.height - contentSize.height,
-      Math.max(displayArea.y, fromRect.y + (fromRect.height - contentSize.height) / 2),
+      Math.max(
+        displayArea.y,
+        fromRect.y + (fromRect.height - contentSize.height) / 2,
+      ),
     ),
   };
 
-  const anchor = { x: fromRect.x + fromRect.width, y: fromRect.y + fromRect.height / 2 };
+  const anchor = {
+    x: fromRect.x + fromRect.width,
+    y: fromRect.y + fromRect.height / 2,
+  };
 
   return { origin, anchor, placement: 'right' };
 };
 
-const computeAutoGeometry = (displayArea: Rect, fromRect: Rect, contentSize: Size, arrowSize: Size): Geometry => {
+const computeAutoGeometry = (
+  displayArea: Rect,
+  fromRect: Rect,
+  contentSize: Size,
+  arrowSize: Size,
+): Geometry => {
   let geom: Geometry | null = null;
   const placements: Placement[] = ['left', 'top', 'right', 'bottom'];
   for (let i = 0; i < 4; i += 1) {
     const placement = placements[i];
-    geom = computeGeometry(contentSize, placement, fromRect, displayArea, arrowSize);
+    geom = computeGeometry(
+      contentSize,
+      placement,
+      fromRect,
+      displayArea,
+      arrowSize,
+    );
     const { origin } = geom;
 
     if (

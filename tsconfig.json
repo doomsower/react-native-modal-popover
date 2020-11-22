@@ -5,17 +5,16 @@
     "declaration": true,
     "jsx": "react-native",
     "lib": ["esnext"],
-    "target": "es5",
+    "target": "es6",
     "module": "commonjs",
     "moduleResolution": "node",
     "noEmitOnError": true,
     "strict": true,
     "pretty": true,
     "removeComments": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "skipLibCheck": true
   },
-  "include": [
-    "src/**/*"
-  ],
+  "include": ["src/**/*"],
   "compileOnSave": true
 }

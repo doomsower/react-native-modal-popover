@@ -1,6 +1,11 @@
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
-import { Dimensions, findNodeHandle, MeasureOnSuccessCallback, NativeModules, View } from 'react-native';
+import {
+  Dimensions,
+  findNodeHandle,
+  MeasureOnSuccessCallback,
+  NativeModules,
+} from 'react-native';
 import { Rect } from './PopoverGeometry';
 
 export interface PopoverControllerRenderProps {
@@ -58,10 +63,17 @@ export class PopoverController extends React.PureComponent<Props, State> {
     }
   };
 
-  private onTouchableMeasured: MeasureOnSuccessCallback = (x0, y0, width, height, x, y) => {
+  private onTouchableMeasured: MeasureOnSuccessCallback = (
+    x0,
+    y0,
+    width,
+    height,
+    x,
+    y,
+  ) => {
     this.setState({
-        showPopover: true,
-        popoverAnchor: { x, y, width, height },
+      showPopover: true,
+      popoverAnchor: { x, y, width, height },
     });
   };
 

@@ -1,9 +1,14 @@
 {
   "name": "react-native-modal-popover",
-  "version": "0.0.12",
+  "version": "1.0.0",
   "description": "Pure JS popover component for react-native",
   "main": "lib/index.js",
-  "types": "./lib/index.d.ts",
+  "types": "lib/index.d.ts",
+  "react-native": "src/index.ts",
+  "files": [
+    "lib/*",
+    "src/*"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/doomsower/react-native-modal-popover.git"
@@ -21,27 +26,40 @@
   },
   "homepage": "https://github.com/doomsower/react-native-modal-popover#readme",
   "scripts": {
-    "compile": "rm -rf ./build/* && tsc",
-    "prepublish": "yarn run compile",
-    "tsc:watch": "yarn run tsc --watch"
+    "clean": "rm -rf ./build/*",
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "prepublishOnly": "yarn lint && yarn build",
+    "lint": "eslint .",
+    "semantic-release": "semantic-release"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.116",
-    "@types/lodash.debounce": "^4.0.4",
-    "@types/react": "^16.4.14",
-    "@types/react-native": "^0.57.6",
-    "tslint": "^5.11.0",
-    "tslint-eslint-rules": "^5.4.0",
-    "tslint-react": "^3.6.0",
-    "typescript": "^3.0.3"
+    "@commitlint/config-conventional": "^11.0.0",
+    "@react-native-community/eslint-config": "^2.0.0",
+    "@semantic-release/changelog": "^5.0.1",
+    "@semantic-release/git": "^9.0.0",
+    "@types/lodash": "^4.14.165",
+    "@types/prop-types": "^15.7.3",
+    "@types/react": "^17.0.0",
+    "@types/react-native": "^0.63.36",
+    "@typescript-eslint/eslint-plugin": "^4.8.1",
+    "@typescript-eslint/parser": "^4.8.1",
+    "commitlint": "^11.0.0",
+    "eslint": "^7.14.0",
+    "husky": "^4.3.0",
+    "prettier": "^2.2.0",
+    "pretty-quick": "^3.1.0",
+    "react": "^17.0.1",
+    "react-native": "^0.63.3",
+    "semantic-release": "^17.2.4",
+    "typescript": "^4.1.2"
   },
   "peerDependencies": {
     "react": ">16.0.0",
     "react-native": ">0.50.0"
   },
   "dependencies": {
-    "@types/prop-types": "^15.5.5",
-    "lodash.debounce": "^4.0.8",
-    "prop-types": "^15.6.2"
+    "lodash": "^4.17.20",
+    "prop-types": "^15.7.2"
   }
 }

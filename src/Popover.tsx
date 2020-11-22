@@ -1,4 +1,4 @@
-import debounce = require('lodash.debounce');
+import debounce from 'lodash/debounce';
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
 import {
@@ -13,7 +13,13 @@ import {
   ViewStyle,
   StyleProp,
 } from 'react-native';
-import { computeGeometry, Geometry, Placement, Rect, Size } from './PopoverGeometry';
+import {
+  computeGeometry,
+  Geometry,
+  Placement,
+  Rect,
+  Size,
+} from './PopoverGeometry';
 
 const styles = StyleSheet.create({
   container: {
@@ -62,7 +68,12 @@ const ARROW_DEG: { [index in Placement]: string } = {
   top: '0deg',
 };
 
-export type Orientation = 'portrait' | 'portrait-upside-down' | 'landscape' | 'landscape-left' | 'landscape-right';
+export type Orientation =
+  | 'portrait'
+  | 'portrait-upside-down'
+  | 'landscape'
+  | 'landscape-left'
+  | 'landscape-right';
 
 export interface PopoverProps {
   visible?: boolean;
@@ -89,11 +100,13 @@ export interface PopoverState extends Geometry {
   animation: Animated.Value;
 }
 
-type LayoutCallback =
-  (event: { nativeEvent: { layout: { x: number, y: number, width: number, height: number } } }) => void;
+type LayoutCallback = (event: {
+  nativeEvent: {
+    layout: { x: number; y: number; width: number; height: number };
+  };
+}) => void;
 
 export class Popover extends React.PureComponent<PopoverProps, PopoverState> {
-
   static propTypes = {
     visible: PropTypes.bool,
     onClose: PropTypes.func,
@@ -130,7 +143,8 @@ export class Popover extends React.PureComponent<PopoverProps, PopoverState> {
     arrowSize: { width: 16, height: 8 },
     placement: 'auto',
     duration: 300,
-    easing: (show) => show ? Easing.out(Easing.back(1.70158)) : Easing.inOut(Easing.quad),
+    easing: (show) =>
+      show ? Easing.out(Easing.back(1.70158)) : Easing.inOut(Easing.quad),
     useNativeDriver: false,
   };
 
@@ -144,7 +158,7 @@ export class Popover extends React.PureComponent<PopoverProps, PopoverState> {
       contentSize: { width: 0, height: 0 },
       anchor: { x: 0, y: 0 },
       origin: { x: 0, y: 0 },
-      placement: props.placement  === 'auto' ? 'top' : props.placement!,
+      placement: props.placement === 'auto' ? 'top' : props.placement!,
       visible: false,
       isAwaitingShow: false,
       animation: new Animated.Value(0),
@@ -160,7 +174,10 @@ export class Popover extends React.PureComponent<PopoverProps, PopoverState> {
     Dimensions.removeEventListener('change', this.onOrientationChange);
   }
 
-  private computeGeometry = (props: PopoverProps, contentSize: Size): Geometry =>
+  private computeGeometry = (
+    props: PopoverProps,
+    contentSize: Size,
+  ): Geometry =>
     computeGeometry(
       contentSize || this.state.contentSize,
       props.placement!,
@@ -171,12 +188,21 @@ export class Popover extends React.PureComponent<PopoverProps, PopoverState> {
 
   private onOrientationChange = () => {
     const dimensions = Dimensions.get('window');
-    this.defaultDisplayArea = { x: 10, y: 10, width: dimensions.width - 20, height: dimensions.height - 20 };
+    this.defaultDisplayArea = {
+      x: 10,
+      y: 10,
+      width: dimensions.width - 20,
+      height: dimensions.height - 20,
+    };
   };
 
   private updateState = debounce(this.setState, 100);
 
-  private measureContent: LayoutCallback = ({ nativeEvent: { layout: { width, height } } }) => {
+  private measureContent: LayoutCallback = ({
+    nativeEvent: {
+      layout: { width, height },
+    },
+  }) => {
     if (width && height) {
       const contentSize = { width, height };
       const geom = this.computeGeometry(this.props, contentSize);
@@ -185,7 +211,7 @@ export class Popover extends React.PureComponent<PopoverProps, PopoverState> {
 
       // Debounce to prevent flickering when displaying a popover with content
       // that doesn't show immediately.
-      this.updateState(({ ...geom, contentSize } as any), () => {
+      this.updateState({ ...geom, contentSize } as any, () => {
         // Once state is set, call the showHandler so it can access all the geometry
         // from the state
         if (isAwaitingShow) {
@@ -197,11 +223,14 @@ export class Popover extends React.PureComponent<PopoverProps, PopoverState> {
 
   private getTranslateOrigin = () => {
     const { contentSize, origin, anchor } = this.state;
-    const popoverCenter = { x: origin.x + contentSize.width / 2, y: origin.y + contentSize.height / 2 };
+    const popoverCenter = {
+      x: origin.x + contentSize.width / 2,
+      y: origin.y + contentSize.height / 2,
+    };
     return { x: anchor.x - popoverCenter.x, y: anchor.y - popoverCenter.y };
   };
 
-  componentWillReceiveProps(nextProps: PopoverProps) {
+  UNSAFE_componentWillReceiveProps(nextProps: PopoverProps) {
     const willBeVisible = nextProps.visible;
     const { visible, fromRect, displayArea } = this.props;
 
@@ -209,11 +238,18 @@ export class Popover extends React.PureComponent<PopoverProps, PopoverState> {
       if (willBeVisible) {
         // We want to start the show animation only when contentSize is known
         // so that we can have some logic depending on the geometry
-        this.setState({ contentSize: { width: 0, height: 0 }, isAwaitingShow: true, visible: true });
+        this.setState({
+          contentSize: { width: 0, height: 0 },
+          isAwaitingShow: true,
+          visible: true,
+        });
       } else {
         this.startAnimation(false);
       }
-    } else if (willBeVisible && (fromRect !== nextProps.fromRect || displayArea !== nextProps.displayArea)) {
+    } else if (
+      willBeVisible &&
+      (fromRect !== nextProps.fromRect || displayArea !== nextProps.displayArea)
+    ) {
       const geom = this.computeGeometry(nextProps, this.state.contentSize);
 
       const isAwaitingShow = this.state.isAwaitingShow;
@@ -237,7 +273,8 @@ export class Popover extends React.PureComponent<PopoverProps, PopoverState> {
     }).start(doneCallback);
   };
 
-  private onHidden = () => this.setState({ visible: false, isAwaitingShow: false });
+  private onHidden = () =>
+    this.setState({ visible: false, isAwaitingShow: false });
 
   private computeStyles = () => {
     const { animation, anchor, origin } = this.state;
@@ -280,7 +317,10 @@ export class Popover extends React.PureComponent<PopoverProps, PopoverState> {
               // Animation is workaround for https://github.com/facebook/react-native/issues/14161
               rotate: animation.interpolate({
                 inputRange: [0, 1],
-                outputRange: [ARROW_DEG[this.state.placement], ARROW_DEG[this.state.placement]],
+                outputRange: [
+                  ARROW_DEG[this.state.placement],
+                  ARROW_DEG[this.state.placement],
+                ],
                 extrapolate: 'clamp',
               }),
             },
@@ -304,13 +344,15 @@ export class Popover extends React.PureComponent<PopoverProps, PopoverState> {
         this.props.contentStyle,
         {
           transform: [
-            { translateX: animation.interpolate({
+            {
+              translateX: animation.interpolate({
                 inputRange: [0, 1],
                 outputRange: [translateOrigin.x, 0],
                 extrapolate: 'clamp',
               }),
             },
-            { translateY: animation.interpolate({
+            {
+              translateY: animation.interpolate({
                 inputRange: [0, 1],
                 outputRange: [translateOrigin.y, 0],
                 extrapolate: 'clamp',
@@ -324,8 +366,8 @@ export class Popover extends React.PureComponent<PopoverProps, PopoverState> {
   };
 
   render() {
-    const { origin, visible } = this.state;
-    const { onClose, onDismiss, supportedOrientations, useNativeDriver } = this.props;
+    const { visible } = this.state;
+    const { onClose, onDismiss, supportedOrientations } = this.props;
     const computedStyles = this.computeStyles();
     const contentSizeAvailable = this.state.contentSize.width;
     return (
@@ -335,24 +377,25 @@ export class Popover extends React.PureComponent<PopoverProps, PopoverState> {
         onRequestClose={onClose}
         onDismiss={onDismiss}
         supportedOrientations={supportedOrientations}
-        onOrientationChange={this.onOrientationChange}
-      >
-        <View style={[styles.container, !!contentSizeAvailable && styles.containerVisible]}>
-
+        onOrientationChange={this.onOrientationChange}>
+        <View
+          style={[
+            styles.container,
+            !!contentSizeAvailable && styles.containerVisible,
+          ]}>
           <TouchableWithoutFeedback onPress={this.props.onClose}>
-            <Animated.View style={computedStyles.background} useNativeDriver={useNativeDriver} />
+            <Animated.View style={computedStyles.background} />
           </TouchableWithoutFeedback>
-
-          <Animated.View style={computedStyles.popover} useNativeDriver={useNativeDriver}>
-            <Animated.View onLayout={this.measureContent} style={computedStyles.content} useNativeDriver={useNativeDriver} >
+          <Animated.View style={computedStyles.popover}>
+            <Animated.View
+              onLayout={this.measureContent}
+              style={computedStyles.content}>
               {this.props.children}
             </Animated.View>
-            <Animated.View style={computedStyles.arrow} useNativeDriver={useNativeDriver} />
+            <Animated.View style={computedStyles.arrow} />
           </Animated.View>
-
         </View>
       </Modal>
     );
   }
-
 }
