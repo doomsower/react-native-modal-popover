@@ -5,6 +5,8 @@ import {
   findNodeHandle,
   MeasureOnSuccessCallback,
   NativeModules,
+  I18nManager,
+  StatusBar
 } from 'react-native';
 import { Rect } from './PopoverGeometry';
 
@@ -71,9 +73,15 @@ export class PopoverController extends React.PureComponent<Props, State> {
     x,
     y,
   ) => {
+    const dimensions = Dimensions.get('window');
     this.setState({
       showPopover: true,
-      popoverAnchor: { x, y, width, height },
+      popoverAnchor: {
+        x: I18nManager.isRTL ? dimensions.width - x : x,
+        y: y - (this.props.calculateStatusBar ? StatusBar.currentHeight ?? 0 : 0),
+        width,
+        height,
+      }
     });
   };
 
