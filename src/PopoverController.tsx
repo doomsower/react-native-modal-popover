@@ -19,6 +19,7 @@ export interface PopoverControllerRenderProps {
 }
 
 export interface Props {
+  calculateStatusBar?: boolean;
   children: (props: PopoverControllerRenderProps) => React.ReactElement<any>;
 }
 
@@ -83,6 +84,7 @@ export class PopoverController extends React.PureComponent<Props, State> {
         height,
       }
     });
+
   };
 
   private closePopover = () => this.setState({ showPopover: false });
