@@ -57,14 +57,14 @@ export const computeGeometry = (
         effectiveArrowSize,
       );
     case 'start':
-      return computeLeftGeometry(
+      return computeStartGeometry(
         displayArea,
         fromRect,
         contentSize,
         effectiveArrowSize,
       );
     case 'end':
-      return computeRightGeometry(
+      return computeEndGeometry(
         displayArea,
         fromRect,
         contentSize,
@@ -110,6 +110,7 @@ const computeTopGeometry: ComputeGeometry = (
     x: fromRect.x + (fromRect.width / 2) * (I18nManager.isRTL ? -1 : 1),
     y: fromRect.y,
   };
+
   return { origin, anchor, placement: 'top' };
 };
 
@@ -140,7 +141,7 @@ const computeBottomGeometry: ComputeGeometry = (
   return { origin, anchor, placement: 'bottom' };
 };
 
-const computeLeftGeometry: ComputeGeometry = (
+const computeStartGeometry: ComputeGeometry = (
   displayArea,
   fromRect,
   contentSize,
@@ -165,10 +166,11 @@ const computeLeftGeometry: ComputeGeometry = (
     x: fromRect.x - (I18nManager.isRTL ? fromRect.width : 0),
     y: fromRect.y + fromRect.height - contentSize.height / 2,
   };
+
   return { origin, anchor, placement: 'start' };
 };
 
-const computeRightGeometry: ComputeGeometry = (
+const computeEndGeometry: ComputeGeometry = (
   displayArea,
   fromRect,
   contentSize,
@@ -179,13 +181,14 @@ const computeRightGeometry: ComputeGeometry = (
       fromRect.x +
       fromRect.width +
       arrowSize.width -
-      (I18nManager.isRTL ? fromRect.width : 0), y: Math.min(
-        displayArea.y + displayArea.height - contentSize.height,
-        Math.max(
-          displayArea.y,
-          fromRect.y + fromRect.height - contentSize.height,
-        ),
+      (I18nManager.isRTL ? fromRect.width : 0),
+    y: Math.min(
+      displayArea.y + displayArea.height - contentSize.height,
+      Math.max(
+        displayArea.y,
+        fromRect.y + fromRect.height - contentSize.height,
       ),
+    ),
   };
 
   const anchor = {

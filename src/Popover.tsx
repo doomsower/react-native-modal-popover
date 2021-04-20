@@ -12,6 +12,8 @@ import {
   View,
   ViewStyle,
   StyleProp,
+  I18nManager,
+  StatusBar
 } from 'react-native';
 import {
   computeGeometry,
@@ -63,8 +65,8 @@ const styles = StyleSheet.create({
 
 const ARROW_DEG: { [index in Placement]: string } = {
   bottom: '-180deg',
-  left: '-90deg',
-  right: '90deg',
+  start: I18nManager.isRTL ? '90deg' : '-90deg',
+  end: I18nManager.isRTL ? '-90deg' : '90deg',
   top: '0deg',
 };
 
@@ -91,6 +93,7 @@ export interface PopoverProps {
   easing?: (show: boolean) => (value: number) => number;
   useNativeDriver?: boolean;
   supportedOrientations?: Orientation[];
+  calculateStatusBar?: boolean;
 }
 
 export interface PopoverState extends Geometry {
@@ -138,14 +141,16 @@ export class Popover extends React.PureComponent<PopoverProps, PopoverState> {
 
   static defaultProps: Partial<PopoverProps> = {
     visible: false,
-    onClose: () => {},
-    onDismiss: () => {},
+    onClose: () => { },
+    onDismiss: () => { },
     arrowSize: { width: 16, height: 8 },
     placement: 'auto',
     duration: 300,
     easing: (show) =>
       show ? Easing.out(Easing.back(1.70158)) : Easing.inOut(Easing.quad),
     useNativeDriver: false,
+    calculateStatusBar: false,
+
   };
 
   static displayName = 'Popover';
@@ -192,7 +197,7 @@ export class Popover extends React.PureComponent<PopoverProps, PopoverState> {
       x: 10,
       y: 10,
       width: dimensions.width - 20,
-      height: dimensions.height - 20,
+      height: dimensions.height - 20 - (this.props.calculateStatusBar ? StatusBar.currentHeight ?? 0 : 0),
     };
   };
 
@@ -309,9 +314,9 @@ export class Popover extends React.PureComponent<PopoverProps, PopoverState> {
           borderTopWidth: height / 2,
           left: anchor.x - origin.x - width / 2,
           top: anchor.y - origin.y - height / 2,
-          borderRightWidth: width / 2,
+          borderEndWidth: width / 2,
           borderBottomWidth: height / 2,
-          borderLeftWidth: width / 2,
+          borderStartWidth: width / 2,
           transform: [
             {
               // Animation is workaround for https://github.com/facebook/react-native/issues/14161
