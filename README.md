@@ -98,6 +98,7 @@ duration | number    | Yes      | 300 | Animation duration
 easing | (show: boolean) => (value: number) => number| Yes | show => show ? Easing.out(Easing.back(1.70158)) : Easing.inOut(Easing.quad) | Function that returns easing function for show or hide animation, depending on `show` argument
 useNativeDriver | bool | Yes | false | Defines if animations should use native driver
 supportedOrientations | array of enum('portrait', 'portrait-upside-down', 'landscape', 'landscape-left', 'landscape-right') | Yes | | This prop is passed to react-native `Modal`, see [react-native docs](https://facebook.github.io/react-native/docs/modal.html#supportedorientations). Set this to `['portrait', 'landscape']` if you want your popover to resprect screen orientation.
+calculateStatusBar | bool | Yes | false | Defines if while use status bar height while calculating "Y" origin of anchor.
 
 ### `PopoverController`
 
