@@ -13,7 +13,7 @@ import {
   ViewStyle,
   StyleProp,
   I18nManager,
-  StatusBar
+  StatusBar,
 } from 'react-native';
 import {
   computeGeometry,
@@ -141,8 +141,8 @@ export class Popover extends React.PureComponent<PopoverProps, PopoverState> {
 
   static defaultProps: Partial<PopoverProps> = {
     visible: false,
-    onClose: () => { },
-    onDismiss: () => { },
+    onClose: () => {},
+    onDismiss: () => {},
     arrowSize: { width: 16, height: 8 },
     placement: 'auto',
     duration: 300,
@@ -150,7 +150,6 @@ export class Popover extends React.PureComponent<PopoverProps, PopoverState> {
       show ? Easing.out(Easing.back(1.70158)) : Easing.inOut(Easing.quad),
     useNativeDriver: false,
     calculateStatusBar: false,
-
   };
 
   static displayName = 'Popover';
@@ -197,7 +196,10 @@ export class Popover extends React.PureComponent<PopoverProps, PopoverState> {
       x: 10,
       y: 10,
       width: dimensions.width - 20,
-      height: dimensions.height - 20 - (this.props.calculateStatusBar ? StatusBar.currentHeight ?? 0 : 0),
+      height:
+        dimensions.height -
+        20 -
+        (this.props.calculateStatusBar ? StatusBar.currentHeight ?? 0 : 0),
     };
   };
 

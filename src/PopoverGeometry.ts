@@ -99,8 +99,8 @@ const computeTopGeometry: ComputeGeometry = (
       Math.max(
         displayArea.x,
         fromRect.x +
-        (fromRect.width - contentSize.width) / 2 -
-        (I18nManager.isRTL ? fromRect.width : 0),
+          (fromRect.width - contentSize.width) / 2 -
+          (I18nManager.isRTL ? fromRect.width : 0),
       ),
     ),
     y: fromRect.y - contentSize.height - arrowSize.height,
@@ -126,8 +126,8 @@ const computeBottomGeometry: ComputeGeometry = (
       Math.max(
         displayArea.x,
         fromRect.x +
-        (fromRect.width - contentSize.width) / 2 -
-        (I18nManager.isRTL ? fromRect.width : 0),
+          (fromRect.width - contentSize.width) / 2 -
+          (I18nManager.isRTL ? fromRect.width : 0),
       ),
     ),
     y: fromRect.y + fromRect.height + arrowSize.height,

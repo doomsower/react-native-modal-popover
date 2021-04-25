@@ -1,13 +1,15 @@
 # react-native-modal-popover
+
 Pure JS popover component for react-native
 
 ![Android](https://raw.githubusercontent.com/doomsower/react-native-modal-popover/master/gifs/android.gif)
 ![iOS](https://raw.githubusercontent.com/doomsower/react-native-modal-popover/master/gifs/ios.gif)
 
 ## About this module
+
 The original [react-native-popover](https://github.com/jeanregisser/react-native-popover) is now outdated,
-so I decided to publish my own module to avoid using github url in my package.json. Something got lost in 
-the process of rewriting, but now it uses `Modal` and native animation drivers, and also has cool helper 
+so I decided to publish my own module to avoid using github url in my package.json. Something got lost in
+the process of rewriting, but now it uses `Modal` and native animation drivers, and also has cool helper
 to use with Touchables. Thanks to @jeanregisser and to the authors of hanging PRs for their code.
 
 ## Requirements
@@ -17,13 +19,14 @@ Previously (version `0.0.6`) this module required react version `>16.2.0` to wor
 Version `0.0.7` does not reqire `React.Fragment` anymore, so you can use with reasonably old versions of react and react-native.
 
 ## Install
+
 ```sh
 yarn add react-native-modal-popover
 ```
 
 ## Usage
 
-This module exports two react components, `Popover` and `PopoverController`. 
+This module exports two react components, `Popover` and `PopoverController`.
 `Popover` works pretty much like original `Popover`, and `PopoverController` is a convenience component that uses [React Render Props](https://github.com/jaredpalmer/awesome-react-render-props) pattern.
 
 **Important** this example uses `React.Fragment` to wrap children, but if you use `react-native` version older than `0.52`, then you should reaplce `React.Fragment` with `View`
@@ -49,25 +52,34 @@ const styles = StyleSheet.create({
     borderTopColor: 'pink',
   },
   background: {
-    backgroundColor: 'rgba(0, 0, 255, 0.5)'
+    backgroundColor: 'rgba(0, 0, 255, 0.5)',
   },
 });
 
 const App = () => (
   <View style={styles.app}>
     <PopoverController>
-      {({ openPopover, closePopover, popoverVisible, setPopoverAnchor, popoverAnchorRect }) => (
+      {({
+        openPopover,
+        closePopover,
+        popoverVisible,
+        setPopoverAnchor,
+        popoverAnchorRect,
+      }) => (
         <React.Fragment>
-          <Button title="Press me!" ref={setPopoverAnchor} onPress={openPopover} />
-          <Popover 
+          <Button
+            title="Press me!"
+            ref={setPopoverAnchor}
+            onPress={openPopover}
+          />
+          <Popover
             contentStyle={styles.content}
             arrowStyle={styles.arrow}
             backgroundStyle={styles.background}
             visible={popoverVisible}
             onClose={closePopover}
             fromRect={popoverAnchorRect}
-            supportedOrientations={['portrait', 'landscape']}
-          >
+            supportedOrientations={['portrait', 'landscape']}>
             <Text>Hello from inside popover!</Text>
           </Popover>
         </React.Fragment>
@@ -83,22 +95,22 @@ export default App;
 
 ### `Popover`
 
-Prop              | Type      | Optional | Default               | Description
------------------ | --------- | -------- | --------------------- | -----------
-visible           | bool      | Yes      | false                 | Show/Hide the popover
-fromRect          | Rect      | No*      |                       | Rectangle at which to anchor the popover. **Optional** when used inside `PopoverTouchable`, **required** when used standalone. If you set this property, you should also change it when screen orientation changes.
-displayArea       | Rect      | Yes      | Screen - 10px padding | Area where the popover is allowed to be displayed. **Important note:** if you use non-default value here and you want to handle screen orientation changes, it is your responsibility to change this value when screen orientation changes.
-placement         | string    | Yes      | 'auto'                | How to position the popover - top &#124; bottom &#124; left &#124; right &#124; auto. When 'auto' is specified, it will determine the ideal placement so that the popover is fully visible within `displayArea`.
-onClose           | function  | Yes      |                       | Callback to be fired when the user closes the popover
-onDismiss         | function  | Yes      |                       | Callback to be fired after the popup closes
-backgroundStyle   | ViewStyle | Yes      |                       | Custom style to be applied to background overlay 
-contentStyle      | ViewStyle | Yes      |                       | Custom style to be applied to popover reactangle. Use it to set round corners, background color, etc.
-arrowStyle        | ViewStyle | Yes      |                       | Custom style to be applied to popover arrow. Use `borderTopColor` to match content backgroundColor
-duration | number    | Yes      | 300 | Animation duration
-easing | (show: boolean) => (value: number) => number| Yes | show => show ? Easing.out(Easing.back(1.70158)) : Easing.inOut(Easing.quad) | Function that returns easing function for show or hide animation, depending on `show` argument
-useNativeDriver | bool | Yes | false | Defines if animations should use native driver
-supportedOrientations | array of enum('portrait', 'portrait-upside-down', 'landscape', 'landscape-left', 'landscape-right') | Yes | | This prop is passed to react-native `Modal`, see [react-native docs](https://facebook.github.io/react-native/docs/modal.html#supportedorientations). Set this to `['portrait', 'landscape']` if you want your popover to resprect screen orientation.
-calculateStatusBar | bool | Yes | false | Defines if while use status bar height while calculating "Y" origin of anchor.
+| Prop                  | Type                                                                                                | Optional | Default                                                                     | Description                                                                                                                                                                                                                                           |
+| --------------------- | --------------------------------------------------------------------------------------------------- | -------- | --------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| visible               | bool                                                                                                | Yes      | false                                                                       | Show/Hide the popover                                                                                                                                                                                                                                 |
+| fromRect              | Rect                                                                                                | No\*     |                                                                             | Rectangle at which to anchor the popover. **Optional** when used inside `PopoverTouchable`, **required** when used standalone. If you set this property, you should also change it when screen orientation changes.                                   |
+| displayArea           | Rect                                                                                                | Yes      | Screen - 10px padding                                                       | Area where the popover is allowed to be displayed. **Important note:** if you use non-default value here and you want to handle screen orientation changes, it is your responsibility to change this value when screen orientation changes.           |
+| placement             | string                                                                                              | Yes      | 'auto'                                                                      | How to position the popover - top &#124; bottom &#124; start &#124; end &#124; auto. When 'auto' is specified, it will determine the ideal placement so that the popover is fully visible within `displayArea`.                                       |
+| onClose               | function                                                                                            | Yes      |                                                                             | Callback to be fired when the user closes the popover                                                                                                                                                                                                 |
+| onDismiss             | function                                                                                            | Yes      |                                                                             | Callback to be fired after the popup closes                                                                                                                                                                                                           |
+| backgroundStyle       | ViewStyle                                                                                           | Yes      |                                                                             | Custom style to be applied to background overlay                                                                                                                                                                                                      |
+| contentStyle          | ViewStyle                                                                                           | Yes      |                                                                             | Custom style to be applied to popover reactangle. Use it to set round corners, background color, etc.                                                                                                                                                 |
+| arrowStyle            | ViewStyle                                                                                           | Yes      |                                                                             | Custom style to be applied to popover arrow. Use `borderTopColor` to match content backgroundColor                                                                                                                                                    |
+| duration              | number                                                                                              | Yes      | 300                                                                         | Animation duration                                                                                                                                                                                                                                    |
+| easing                | (show: boolean) => (value: number) => number                                                        | Yes      | show => show ? Easing.out(Easing.back(1.70158)) : Easing.inOut(Easing.quad) | Function that returns easing function for show or hide animation, depending on `show` argument                                                                                                                                                        |
+| useNativeDriver       | bool                                                                                                | Yes      | false                                                                       | Defines if animations should use native driver                                                                                                                                                                                                        |
+| supportedOrientations | array of enum('portrait', 'portrait-upside-down', 'landscape', 'landscape-left', 'landscape-right') | Yes      |                                                                             | This prop is passed to react-native `Modal`, see [react-native docs](https://facebook.github.io/react-native/docs/modal.html#supportedorientations). Set this to `['portrait', 'landscape']` if you want your popover to resprect screen orientation. |
+| calculateStatusBar    | bool                                                                                                | Yes      | false                                                                       | Defines if while use status bar height while calculating "Y" origin of anchor.                                                                                                                                                                        |
 
 ### `PopoverController`
 
@@ -106,14 +118,13 @@ calculateStatusBar | bool | Yes | false | Defines if while use status bar height
 
 #### `PopoverControllerRenderProps`:
 
-Prop                 | Type         | Description
--------------------- | ------------ | --------------------------------------------
-openPopover          | () => void   | Call this function when you want to open popover, e.g. pass to `onPress` of a `Button`
-closePopover         | () => void   | Call this function when you want to close popover. Typically you pass this as `onClose` prop of `Popover`, which will make popover close when tapped outside. If you have a button inside popover which should close the popover, pass this function to this button.
-popoverVisible       | boolean      | Pass this to `visible` prop of `Popover` component
-setPopoverAnchor     | ref function | Pass this as `ref` to popover UI handle. This will bind popover display position to the position of this UI handle.
-popoverAnchorRect    | Rect         | Pass this as `fromRect` prop of `Popover` component
-
+| Prop              | Type         | Description                                                                                                                                                                                                                                                          |
+| ----------------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| openPopover       | () => void   | Call this function when you want to open popover, e.g. pass to `onPress` of a `Button`                                                                                                                                                                               |
+| closePopover      | () => void   | Call this function when you want to close popover. Typically you pass this as `onClose` prop of `Popover`, which will make popover close when tapped outside. If you have a button inside popover which should close the popover, pass this function to this button. |
+| popoverVisible    | boolean      | Pass this to `visible` prop of `Popover` component                                                                                                                                                                                                                   |
+| setPopoverAnchor  | ref function | Pass this as `ref` to popover UI handle. This will bind popover display position to the position of this UI handle.                                                                                                                                                  |
+| popoverAnchorRect | Rect         | Pass this as `fromRect` prop of `Popover` component                                                                                                                                                                                                                  |
 
 ### `Rect`
 
@@ -125,7 +136,13 @@ In this case you have to handle refs, measure UI handle and manage popover visib
 
 ```jsx
 import React from 'react';
-import {findNodeHandle, NativeModules, StyleSheet, Text, View} from 'react-native';
+import {
+  findNodeHandle,
+  NativeModules,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import Button from './Button';
 import Popover from './popover';
 
@@ -139,7 +156,6 @@ const styles = StyleSheet.create({
 });
 
 export default class App2 extends React.Component {
-
   state = {
     showPopover: false,
     popoverAnchor: { x: 0, y: 0, width: 0, height: 0 },
@@ -155,7 +171,7 @@ export default class App2 extends React.Component {
   };
 
   openPopover = () => {
-    this.setState({ showPopover: true })
+    this.setState({ showPopover: true });
   };
 
   closePopover = () => this.setState({ showPopover: false });
@@ -164,13 +180,18 @@ export default class App2 extends React.Component {
     return (
       <View style={styles.app}>
         <Button
-          ref={r => {this.button = r}} icon="arrow-up" onPress={this.openPopover} onLayout={this.setButton}/>
+          ref={(r) => {
+            this.button = r;
+          }}
+          icon="arrow-up"
+          onPress={this.openPopover}
+          onLayout={this.setButton}
+        />
         <Popover
           visible={this.state.showPopover}
           fromRect={this.state.popoverAnchor}
           onClose={this.closePopover}
-          placement="bottom"
-        >
+          placement="bottom">
           <Text>Hi</Text>
         </Popover>
       </View>
@@ -182,7 +203,3 @@ export default class App2 extends React.Component {
 ## Contributing
 
 If you want to add some features, feel free to submit PR.
-
-
-
-
