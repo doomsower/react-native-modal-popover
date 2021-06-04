@@ -13,7 +13,8 @@
     "pretty": true,
     "removeComments": true,
     "sourceMap": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "esModuleInterop": true
   },
   "include": ["src/**/*"],
   "compileOnSave": true
