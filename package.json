@@ -1,6 +1,6 @@
 {
   "name": "react-native-modal-popover",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "Pure JS popover component for react-native",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
