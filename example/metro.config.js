@@ -22,9 +22,11 @@ module.exports = {
   resolver: {
     extraNodeModules: {
       'react-native': path.resolve(__dirname, 'node_modules/react-native'),
+      react: path.resolve(__dirname, 'node_modules/react'),
     },
     blacklistRE: blacklist([
       new RegExp(`${libRoot}/node_modules/react-native/.*`),
+      new RegExp(`${libRoot}/node_modules/react/.*`),
     ]),
   },
 };

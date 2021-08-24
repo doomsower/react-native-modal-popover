@@ -1,24 +1,10 @@
 import React from 'react';
-import { StyleProp, Text, View, ViewStyle } from 'react-native';
+import { Text, View } from 'react-native';
 import { Popover, PopoverController } from 'react-native-modal-popover';
 import Button from './Button';
+import { ExampleProps } from './types';
 
-export interface PopoverExampleProps {
-  width?: number;
-  height?: number;
-  icon: string;
-  text: string;
-  alignItems: ViewStyle['alignItems'];
-  justifyContent: ViewStyle['justifyContent'];
-  popoverStyles?: {
-    backgroundStyle?: StyleProp<ViewStyle>;
-    arrowStyle?: StyleProp<ViewStyle>;
-    popoverStyle?: StyleProp<ViewStyle>;
-    contentStyle?: StyleProp<ViewStyle>;
-  };
-}
-
-export const PopoverExample: React.FC<PopoverExampleProps> = (props) => {
+export const PopoverControllerExample: React.FC<ExampleProps> = (props) => {
   const {
     width,
     height,

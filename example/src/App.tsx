@@ -1,7 +1,10 @@
 import { useLayout } from '@react-native-community/hooks';
 import React from 'react';
 import { StyleSheet, View, SafeAreaView, StatusBar } from 'react-native';
-import { PopoverExample, PopoverExampleProps } from './PopoverExample';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { PopoverControllerExample } from './PopoverControllerExample';
+import { ExampleProps } from './types';
+import { PopoverHookExample } from './PopoverHookExample';
 
 const styles = StyleSheet.create({
   container: {
@@ -30,7 +33,7 @@ const cenralPopoverStyles = StyleSheet.create({
   },
 });
 
-const examples: PopoverExampleProps[] = [
+const examples: ExampleProps[] = [
   {
     icon: 'arrow-top-left',
     text: 'I am top-left popover',
@@ -92,6 +95,11 @@ const examples: PopoverExampleProps[] = [
 
 const App: React.FC = () => {
   const { width, height, onLayout } = useLayout();
+
+  // Change commented line to see different example
+  const Example = PopoverHookExample;
+  // const Example = PopoverControllerExample;
+
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -99,7 +107,7 @@ const App: React.FC = () => {
       <SafeAreaView style={styles.container}>
         <View style={styles.app} onLayout={onLayout}>
           {examples.map((example) => (
-            <PopoverExample
+            <Example
               width={width / 3}
               height={height / 3}
               key={example.icon}

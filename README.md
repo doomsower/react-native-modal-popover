@@ -26,10 +26,71 @@ yarn add react-native-modal-popover
 
 ## Usage
 
-This module exports two react components, `Popover` and `PopoverController`.
+This module exports two react components, `Popover` and `PopoverController`, and one react hook, `usePopover`.
 `Popover` works pretty much like original `Popover`, and `PopoverController` is a convenience component that uses [React Render Props](https://github.com/jaredpalmer/awesome-react-render-props) pattern.
 
 **Important** this example uses `React.Fragment` to wrap children, but if you use `react-native` version older than `0.52`, then you should reaplce `React.Fragment` with `View`
+
+### Using hook
+
+`usePopover` is preferred modern way to have popover in your app.
+
+```jsx
+import React from 'react';
+import { Button, StyleSheet, Text, View } from 'react-native';
+import { Popover, usePopover } from 'react-native-modal-popover';
+
+const styles = StyleSheet.create({
+  app: {
+    ...StyleSheet.absoluteFillObject,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#c2ffd2',
+  },
+  content: {
+    padding: 16,
+    backgroundColor: 'pink',
+    borderRadius: 8,
+  },
+  arrow: {
+    borderTopColor: 'pink',
+  },
+  background: {
+    backgroundColor: 'rgba(0, 0, 255, 0.5)',
+  },
+});
+
+const App = () => {
+  const {
+    openPopover,
+    closePopover,
+    popoverVisible,
+    touchableRef,
+    popoverAnchorRect,
+  } = usePopover();
+  return (
+    <View style={styles.app}>
+      <Button title="Press me!" ref={touchableRef} onPress={openPopover} />
+      <Popover
+        contentStyle={styles.content}
+        arrowStyle={styles.arrow}
+        backgroundStyle={styles.background}
+        visible={popoverVisible}
+        onClose={closePopover}
+        fromRect={popoverAnchorRect}
+        supportedOrientations={['portrait', 'landscape']}>
+        <Text>Hello from inside popover!</Text>
+      </Popover>
+    </View>
+  );
+};
+
+export default App;
+```
+
+### Using PopoverController
+
+Use `PopoverController` if you cannot use hooks for some reason.
 
 ```jsx
 import React from 'react';
@@ -112,19 +173,21 @@ export default App;
 | supportedOrientations | array of enum('portrait', 'portrait-upside-down', 'landscape', 'landscape-left', 'landscape-right') | Yes      |                                                                             | This prop is passed to react-native `Modal`, see [react-native docs](https://facebook.github.io/react-native/docs/modal.html#supportedorientations). Set this to `['portrait', 'landscape']` if you want your popover to resprect screen orientation. |
 | calculateStatusBar    | bool                                                                                                | Yes      | false                                                                       | Defines if while use status bar height while calculating "Y" origin of anchor.                                                                                                                                                                        |
 
-### `PopoverController`
+### `PopoverController` and `usePopover` hook
 
 `PopoverController` accepts function as children. This function is called with one argument of type `PopoverControllerRenderProps` and returns react element. The children of this element are your UI handle to open popover (`Button`, `Toggle`, whatever) and `Popover` element itself. Pass properties to you handle and `Popover`, and `PopoverController` will make them work together behind the scenes. All the props are required to make controller work.
 
+`usePopover` returns object with same props as `PopoverControllerRenderProps`, except that ref has different name: `touchableRef`.
+
 #### `PopoverControllerRenderProps`:
 
-| Prop              | Type         | Description                                                                                                                                                                                                                                                          |
-| ----------------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| openPopover       | () => void   | Call this function when you want to open popover, e.g. pass to `onPress` of a `Button`                                                                                                                                                                               |
-| closePopover      | () => void   | Call this function when you want to close popover. Typically you pass this as `onClose` prop of `Popover`, which will make popover close when tapped outside. If you have a button inside popover which should close the popover, pass this function to this button. |
-| popoverVisible    | boolean      | Pass this to `visible` prop of `Popover` component                                                                                                                                                                                                                   |
-| setPopoverAnchor  | ref function | Pass this as `ref` to popover UI handle. This will bind popover display position to the position of this UI handle.                                                                                                                                                  |
-| popoverAnchorRect | Rect         | Pass this as `fromRect` prop of `Popover` component                                                                                                                                                                                                                  |
+| Prop                                                                 | Type         | Description                                                                                                                                                                                                                                                          |
+| -------------------------------------------------------------------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| openPopover                                                          | () => void   | Call this function when you want to open popover, e.g. pass to `onPress` of a `Button`                                                                                                                                                                               |
+| closePopover                                                         | () => void   | Call this function when you want to close popover. Typically you pass this as `onClose` prop of `Popover`, which will make popover close when tapped outside. If you have a button inside popover which should close the popover, pass this function to this button. |
+| popoverVisible                                                       | boolean      | Pass this to `visible` prop of `Popover` component                                                                                                                                                                                                                   |
+| setPopoverAnchor (`PopoverController`) / touchableRef (`usePopover`) | ref function | Pass this as `ref` to popover UI handle. This will bind popover display position to the position of this UI handle.                                                                                                                                                  |
+| popoverAnchorRect                                                    | Rect         | Pass this as `fromRect` prop of `Popover` component                                                                                                                                                                                                                  |
 
 ### `Rect`
 

@@ -8,3 +8,4 @@ export {
   PopoverControllerRenderProps,
 } from './PopoverController';
 export { PopoverTouchable } from './PopoverTouchable';
+export * from './usePopover';
