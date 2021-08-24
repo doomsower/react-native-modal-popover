@@ -1,40 +1,47 @@
 {
-  "name": "example",
+  "name": "Example",
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "clean": "rm -rf $TMPDIR/react-* && rm -rf $TMPDIR/metro-bundler-cache-* && watchman watch-del-all && yarn cache clean && rm -rf node_modules/",
-    "clean-all": "(yarn ios:clean) && (yarn android:clean) && yarn clean",
     "android": "react-native run-android",
-    "android:clean": "(cd android && ./gradlew clean) && rm -rf android/build && rm -rf android/app/build",
     "ios": "react-native run-ios",
-    "ios:clean": "rm -rf ios/build/* && rm -rf $HOME/Library/Developer/Xcode/DerivedData/* && cd ios && pod deintegrate && rm Podfile.lock",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "postinstall": "npx pod-install"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
     "@react-native-community/hooks": "^2.6.0",
-    "react": "17.0.1",
-    "react-native": "0.63.3",
-    "react-native-vector-icons": "^7.1.0"
+    "react": "17.0.2",
+    "react-native": "0.65.1",
+    "react-native-vector-icons": "^8.1.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.8.4",
-    "@babel/runtime": "^7.8.4",
-    "@react-native-community/eslint-config": "^2.0.0",
-    "@types/jest": "^26.0.15",
-    "@types/react-native": "^0.63.2",
-    "@types/react-native-vector-icons": "^6.4.6",
-    "@types/react-test-renderer": "^17.0.0",
-    "@typescript-eslint/eslint-plugin": "^4.8.1",
-    "@typescript-eslint/parser": "^4.8.1",
-    "babel-jest": "^26.6.3",
+    "@babel/core": "^7.12.9",
+    "@babel/runtime": "^7.12.5",
+    "@react-native-community/eslint-config": "^3.0.0",
+    "@types/jest": "^27.0.1",
+    "@types/react-native": "^0.64.5",
+    "@types/react-test-renderer": "^17.0.1",
+    "babel-jest": "^27.0.6",
     "eslint": "^7.14.0",
-    "jest": "^26.6.3",
-    "metro-react-native-babel-preset": "^0.64.0",
-    "react-test-renderer": "17.0.1",
-    "typescript": "^4.1.2"
+    "jest": "^27.0.6",
+    "metro-react-native-babel-preset": "^0.66.0",
+    "react-native-codegen": "^0.0.7",
+    "react-test-renderer": "17.0.2",
+    "typescript": "^4.3.5"
+  },
+  "resolutions": {
+    "@types/react": "^17"
+  },
+  "jest": {
+    "preset": "react-native",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
   }
 }
