@@ -78,9 +78,9 @@ export function usePopover(calculateStatusBar = false): UsePopoverHook {
         requestAnimationFrame(openPopover);
       }
     };
-    Dimensions.addEventListener('change', onOrientationChange);
+    const listener = Dimensions.addEventListener('change', onOrientationChange);
     return () => {
-      Dimensions.removeEventListener('change', onOrientationChange);
+       listener.remove()
     };
   }, [showPopover, openPopover]);
 
