@@ -5,11 +5,13 @@ import {
   findNodeHandle,
   MeasureOnSuccessCallback,
   NativeModules,
+  EmitterSubscription,
 } from 'react-native';
 import { Rect } from './PopoverGeometry';
 
 export interface Props {
-  onPopoverDisplayed?: () => any;
+  onPopoverDisplayed?: () => unknown;
+  children?: React.ReactNode;
 }
 
 export interface State {
@@ -22,22 +24,28 @@ export class PopoverTouchable extends React.PureComponent<Props, State> {
     onPopoverDisplayed: PropTypes.func,
   };
 
+  private dimensionsSub?: EmitterSubscription;
+
   constructor(props: Props) {
     super(props);
     this.state = {
       showPopover: false,
       popoverAnchor: { x: 0, y: 0, width: 0, height: 0 },
     };
-    // Not yet
-    // console.warn('PopoverTouchable is deprecated, please use PopoverController instead');
+    console.warn(
+      'PopoverTouchable is deprecated, please use PopoverController instead',
+    );
   }
 
   componentDidMount() {
-    Dimensions.addEventListener('change', this.onOrientationChange);
+    this.dimensionsSub = Dimensions.addEventListener(
+      'change',
+      this.onOrientationChange,
+    );
   }
 
   componentWillUnmount() {
-    Dimensions.removeEventListener('change', this.onOrientationChange);
+    this.dimensionsSub?.remove();
   }
 
   private onOrientationChange = () => {

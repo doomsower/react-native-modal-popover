@@ -14,6 +14,7 @@ import {
   StyleProp,
   I18nManager,
   StatusBar,
+  EmitterSubscription,
 } from 'react-native';
 import {
   computeGeometry,
@@ -94,6 +95,7 @@ export interface PopoverProps {
   useNativeDriver?: boolean;
   supportedOrientations?: Orientation[];
   calculateStatusBar?: boolean;
+  children?: React.ReactNode;
 }
 
 export interface PopoverState extends Geometry {
@@ -155,6 +157,7 @@ export class Popover extends React.PureComponent<PopoverProps, PopoverState> {
   static displayName = 'Popover';
 
   private defaultDisplayArea!: Rect;
+  private dimensionsSub?: EmitterSubscription;
 
   constructor(props: PopoverProps) {
     super(props);
@@ -171,11 +174,14 @@ export class Popover extends React.PureComponent<PopoverProps, PopoverState> {
   }
 
   componentDidMount() {
-    Dimensions.addEventListener('change', this.onOrientationChange);
+    this.dimensionsSub = Dimensions.addEventListener(
+      'change',
+      this.onOrientationChange,
+    );
   }
 
   componentWillUnmount() {
-    Dimensions.removeEventListener('change', this.onOrientationChange);
+    this.dimensionsSub?.remove();
   }
 
   private computeGeometry = (

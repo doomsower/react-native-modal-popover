@@ -7,6 +7,7 @@ import {
   NativeModules,
   I18nManager,
   StatusBar,
+  EmitterSubscription,
 } from 'react-native';
 import { Rect } from './PopoverGeometry';
 
@@ -38,12 +39,17 @@ export class PopoverController extends React.PureComponent<Props, State> {
     popoverAnchor: { x: 0, y: 0, width: 0, height: 0 },
   };
 
+  private dimensionsSub?: EmitterSubscription;
+
   componentDidMount() {
-    Dimensions.addEventListener('change', this.onOrientationChange);
+    this.dimensionsSub = Dimensions.addEventListener(
+      'change',
+      this.onOrientationChange,
+    );
   }
 
   componentWillUnmount() {
-    Dimensions.removeEventListener('change', this.onOrientationChange);
+    this.dimensionsSub?.remove();
   }
 
   private onOrientationChange = () => {
