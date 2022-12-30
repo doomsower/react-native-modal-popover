@@ -80,7 +80,7 @@ export function usePopover(calculateStatusBar = false): UsePopoverHook {
     };
     const listener = Dimensions.addEventListener('change', onOrientationChange);
     return () => {
-       listener.remove()
+      listener.remove();
     };
   }, [showPopover, openPopover]);
 

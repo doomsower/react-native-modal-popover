@@ -1,39 +1,32 @@
 name: Release
+
 on:
   push:
     branches:
       - master
+
+env:
+  HUSKY: 0
+  CI: true
+
 jobs:
   release:
-    name: Release
     runs-on: ubuntu-latest
+
     steps:
-      - name: Check out
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v1
+      - uses: actions/setup-node@v3
         with:
-          node-version: 12
+          cache: 'yarn'
 
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
+      # No lint or prettier here since they were supposed to run on PR action
+      - name: Install
+        run: |
+          yarn install --frozen-lockfile
 
-      - name: Cache node_modules
-        uses: actions/cache@v1
-        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
-
-      - name: Release
+      - name: Semantic Release
+        uses: cycjimmy/semantic-release-action@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: yarn semantic-release
